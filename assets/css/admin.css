@@ -1,0 +1,198 @@
+/* =====================================================
+   ADMIN – GLOBAL STYLES
+   ===================================================== */
+
+body {
+    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+    min-height: 100vh;
+}
+
+h2 {
+    font-weight: 700;
+    letter-spacing: 0.4px;
+}
+
+/* Buttons (global admin) */
+.btn {
+    border-radius: 30px;
+    font-weight: 600;
+    transition: all 0.25s ease;
+}
+
+.btn:hover {
+    transform: translateY(-2px);
+}
+
+/* =====================================================
+   ADMIN DASHBOARD – LAYOUT (CENTERED)
+   ===================================================== */
+
+.admin-dashboard {
+    min-height: calc(100vh - 120px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.dashboard-wrapper {
+    width: 100%;
+    max-width: 900px;
+    text-align: center;
+}
+
+/* =====================================================
+   DASHBOARD – STATS CARDS
+   ===================================================== */
+
+.dashboard-cards {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 30px;
+}
+
+.dashboard-card {
+    border-radius: 18px;
+    padding: 28px;
+    color: #fff;
+    transition: all 0.35s ease;
+    cursor: default;
+}
+
+.dashboard-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+}
+
+.dashboard-card h3 {
+    font-size: 2.8rem;
+    font-weight: 800;
+    margin-bottom: 4px;
+}
+
+.dashboard-card p {
+    margin: 0;
+    opacity: 0.9;
+    font-size: 0.95rem;
+}
+
+/* Card colors */
+.bg-blue {
+    background: #2563eb;
+}
+
+.bg-green {
+    background: #16a34a;
+}
+
+.bg-red {
+    background: #dc2626;
+}
+
+/* =====================================================
+   DASHBOARD – ACTION BUTTONS
+   ===================================================== */
+
+.dashboard-actions {
+    margin-top: 40px;
+    display: flex;
+    justify-content: center;
+    gap: 14px;
+    flex-wrap: wrap;
+}
+
+/* =====================================================
+   ADMIN TABLES (Logs, Attempts, Payments)
+   ===================================================== */
+
+.table {
+    background: #fff;
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.table thead {
+    background: linear-gradient(135deg, #111827, #1f2937);
+    color: #fff;
+}
+
+.table td,
+.table th {
+    vertical-align: middle;
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(0,0,0,0.04);
+}
+
+/* =====================================================
+   BADGES (status, logs, types)
+   ===================================================== */
+
+.badge {
+    font-size: 0.8rem;
+    padding: 6px 10px;
+}
+
+/* =====================================================
+   ADMIN FORMS (Edit User, Create, etc.)
+   ===================================================== */
+
+.admin-card {
+    background: #fff;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 25px 60px rgba(0,0,0,0.12);
+    animation: fadeIn 0.4s ease;
+}
+
+.admin-card h2 {
+    font-weight: 800;
+}
+
+.admin-card input,
+.admin-card select {
+    background-color: #ffffff !important;
+    border: 2px solid #d1d5db !important;
+    color: #111827 !important;
+    padding: 10px 14px;
+    border-radius: 12px;
+}
+
+.admin-card input:focus,
+.admin-card select:focus {
+    border-color: #2563eb !important;
+    box-shadow: 0 0 0 3px rgba(37,99,235,0.2) !important;
+    outline: none;
+}
+
+/* =====================================================
+   ANIMATIONS
+   ===================================================== */
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =====================================================
+   RESPONSIVE
+   ===================================================== */
+
+@media (max-width: 768px) {
+    .dashboard-cards {
+        grid-template-columns: 1fr;
+    }
+
+    .dashboard-card h3 {
+        font-size: 2.2rem;
+    }
+}
+
+

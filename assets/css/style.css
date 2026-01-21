@@ -1,0 +1,1123 @@
+/* ============================================================
+   1. GLOBAL THEME SETTINGS (Dark / Light Mode)
+   ============================================================ */
+
+body {
+    background-color: #1a1c1d;
+    color: #fff;
+    transition: 0.3s ease-in-out;
+}
+
+body.light-mode {
+    background-color: #f4f4f4 !important;
+    color: #000 !important;
+}
+
+/* Placeholder colors */
+input::placeholder {
+    color: #e5e5e5 !important;
+    opacity: 1 !important;
+}
+
+body.light-mode input::placeholder {
+    color: #777 !important;
+}
+
+/* Light mode - Inputs */
+body.light-mode input.form-control {
+    background-color: #fff !important;
+    color: #000 !important;
+    border: 1px solid #aaa !important;
+}
+
+/* Light mode - Theme toggle button */
+body.light-mode #themeToggle {
+    border-color: #444 !important;
+    color: #222 !important;
+    background-color: #f8f8f8 !important;
+}
+
+
+/* ============================================================
+   2. AUTHENTICATION CARDS (Login & Register UI)
+   ============================================================ */
+
+.login-card,
+.register-card {
+    background-color: #1c1f22;
+    padding: 35px;
+    border-radius: 12px;
+    width: 380px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+body.light-mode .login-card,
+body.light-mode .register-card {
+    background-color: #ffffff !important;
+    color: #000 !important;
+    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+}
+
+body.light-mode .login-card input.form-control,
+body.light-mode .register-card input.form-control {
+    background-color: #f3f3f3 !important;
+    color: #000 !important;
+    border: 1px solid #ccc !important;
+}
+
+.app-title {
+    font-family: "Billabong", cursive;
+    font-size: 50px;
+    text-align: center;
+    margin-bottom: 25px;
+}
+
+body.light-mode .app-title {
+    color: #000 !important;
+}
+
+/* Inputs */
+input.form-control {
+    background-color: #25282b;
+    border: 1px solid #555;
+    color: #fff !important;
+}
+
+input.form-control:focus {
+    background-color: #24282c;
+    border-color: #4c5fff;
+    color: #fff;
+}
+
+/* Buttons */
+.btn-login,
+.btn-register {
+    background-color: #4c5fff;
+    width: 100%;
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn-login:hover,
+.btn-register:hover {
+    background-color: #3a46d1;
+}
+
+
+/* ============================================================
+   3. NAVBAR (Instagram Style)
+   ============================================================ */
+
+/* Placeholder */
+.nav-search input::placeholder {
+    color: #999 !important;
+}
+
+body.dark-mode .nav-search input::placeholder {
+    color: #ccc !important;
+}
+
+/* Navbar Logo */
+.navbar-brand {
+    font-family: "Billabong", cursive;
+    font-size: 40px;
+    font-weight: bold;
+    margin-left: 15px;
+    color: #fff !important;
+}
+
+body.light-mode .navbar-brand {
+    color: #000 !important;
+}
+
+/* Navbar Icons */
+.nav-icon {
+    font-size: 22px;
+    color: #fff !important;
+    transition: 0.2s;
+}
+
+body.light-mode .nav-icon {
+    color: #000 !important;
+}
+
+.nav-icon:hover {
+    opacity: 0.7;
+}
+
+
+
+body.light-mode .nav-search input {
+    background: #f1f1f1 !important;    /* LIGHT MODE */
+    border: 1px solid #ccc !important;
+    color: #000 !important;
+}
+
+.main-nav {
+    padding: 12px 0;
+    background-color: #1b1d1f; /* ngjyra e navbar-it */
+    border-bottom: 2px solid transparent; /* vend për gradient */
+    border-image: linear-gradient(to right, #ff512f, #dd2476, #ff512f) 1;
+}
+
+
+
+
+/* Navbar background */
+.main-nav {
+    padding: 12px 0;
+    background: linear-gradient(#1a1c1d, #1a1c1d) padding-box,
+                linear-gradient(to right, #ff512f, #dd2476, #ff512f) border-box;
+}
+
+body.light-mode .main-nav {
+    background: linear-gradient(#ffffff, #ffffff) padding-box,
+                linear-gradient(to right, #ff512f, #dd2476, #ff512f) border-box !important;
+}
+
+
+/* Theme button */
+#themeToggle {
+    border-radius: 20px;
+    padding: 4px 12px;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+
+/* ============================================================
+   4. PROFILE PAGE
+   ============================================================ */
+
+.profile-card {
+    max-width: 850px;
+    background: rgba(255,255,255,0.03);
+    border-radius: 14px;
+    padding: 30px;
+    margin: auto;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    backdrop-filter: blur(4px);
+}
+
+body.light-mode .profile-card {
+    background: #ffffff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.profile-photo {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #4c5fff;
+    box-shadow: 0 0 12px rgba(0,0,0,0.5);
+    transition: 0.25s ease;
+}
+
+.profile-photo:hover {
+    scale: 1.03;
+    opacity: 0.9;
+}
+
+.profile-card input.form-control {
+    background-color: #25282b;
+    border: 1px solid #555;
+    color: #fff;
+}
+
+body.light-mode .profile-card input.form-control {
+    background-color: #fff;
+    color: #000;
+}
+
+.profile-card .btn-success,
+.profile-card .btn-primary {
+    padding: 10px;
+    font-weight: 600;
+}
+
+/* Logout Button */
+.logout-btn {
+    background: #ff4d4d;
+    color: white !important;
+    padding: 6px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 14px;
+    transition: 0.25s ease;
+    border: none;
+}
+
+.logout-btn:hover {
+    background: #e63939;
+    transform: translateY(-1px);
+}
+
+
+/* ==============================
+   REGISTER PAGE - INSTAGRAM STYLE
+============================== */
+
+.register-container {
+    margin-top: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.register-box {
+    width: 350px;
+    background: #1c1f22;
+    padding: 30px 35px;
+    border-radius: 12px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+}
+
+body.light-mode .register-box {
+    background: #ffffff;
+    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.insta-title {
+    font-family: "Billabong", cursive;
+    font-size: 55px;
+    color: #fff;
+    margin-bottom: 20px;
+}
+
+body.light-mode .insta-title {
+    color: #000;
+}
+
+.reg-input {
+    width: 100%;
+    padding: 10px 14px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    border: 1px solid #333;
+    background: #25282b;
+    color: #fff;
+}
+
+.reg-input::placeholder {
+    color: #bbb;
+}
+
+body.light-mode .reg-input {
+    background: #f4f4f4;
+    border: 1px solid #ccc;
+    color: #000;
+}
+
+.reg-btn {
+    width: 100%;
+    background: #3897f0;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    color: white;
+    margin-top: 5px;
+}
+
+.reg-btn:hover {
+    background: #2d85d4;
+}
+
+.reg-policy {
+    font-size: 12px;
+    color: #aaa;
+    margin-top: 15px;
+}
+
+.login-redirect {
+    margin-top: 15px;
+    padding: 20px;
+    width: 350px;
+    text-align: center;
+    border-radius: 8px;
+    background: #1c1f22;
+}
+
+body.light-mode .login-redirect {
+    background: #ffffff;
+    border: 1px solid #ddd;
+}
+
+.login-redirect a {
+    color: #3897f0;
+    font-weight: bold;
+    text-decoration: none;
+}
+
+
+
+
+
+/* =========================
+   CART ITEMS
+   ========================= */
+
+/* LIGHT MODE */
+body.light-mode .cart-item,
+body.light-mode .cart-summary,
+body.light-mode .card.p-3 {
+    background: #ffffff;
+    color: #111;
+    border: 1px solid #2a2c2e;
+    border-radius: 10px;
+}
+
+/* DARK MODE */
+body:not(.light-mode) .cart-item,
+body:not(.light-mode) .card.p-3 {
+    background: #1f2225 ;
+    color: #ffffff;
+    border: 1px solid #2a2c2e;
+    border-radius: 10px;
+}
+
+/* CART SUMMARY – gjithmonë e bardhë (Autodoc style) */
+.cart-summary {
+    background: #ffffff !important;
+    color: #111 !important;
+    border: 2px solid #2a2c2e;
+    border-radius: 10px;
+
+    /* override Bootstrap vars */
+    --bs-card-bg: #ffffff;
+    --bs-card-color: #111;
+}
+
+
+
+.profile-photo {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    object-fit: cover;   /* Shfaq foton si duhet */
+    border: 3px solid #4d7fff; /* opsionale */
+}
+
+/* Light mode profile photo border */
+body.light-mode .profile-photo {
+    border: 3px solid #4d7fff !important;
+}
+
+
+@media (max-width: 768px) {
+  .product-card {
+    margin: 0 auto;
+    width: 90%;
+  }
+  .btn {
+    font-size: 13px;
+    padding: 6px 10px;
+  }
+  #cart-count {
+    font-size: 11px;
+  }
+}
+
+
+/* ============================
+   CATEGORIES STYLE - EAGLEDROP
+   ============================ */
+
+.category-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding-bottom: 12px;
+  scrollbar-width: thin;
+  scrollbar-color: #ccc transparent;
+}
+
+.category-scroll::-webkit-scrollbar {
+  height: 8px;
+}
+.category-scroll::-webkit-scrollbar-thumb {
+  background-color: #ccc;
+  border-radius: 4px;
+}
+.category-scroll::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+/* === Karta e kategorisë === */
+.category-card {
+  border-radius: 14px;
+  border: 1px solid #eee;
+  background: #fff;
+  transition: all 0.3s ease;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  overflow: hidden;
+}
+
+/* Efekti hover */
+.category-card:hover {
+  transform: translateY(-6px);
+  border-color: #ff6600;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+}
+
+/* FOTO */
+.category-card img {
+  width: 100%;
+  height: 150px;
+  object-fit: contain;
+  background: linear-gradient(to bottom, #f9f9f9, #fff);
+  border-bottom: 1px solid #eee;
+  padding: 12px;
+  transition: transform 0.3s ease;
+}
+
+.category-card:hover img {
+  transform: scale(1.06);
+}
+
+/* TEKSTI */
+.category-card .card-body {
+  text-align: center;
+  padding-top: 10px;
+}
+
+.category-card h6 {
+  color: #222;
+  font-weight: 600;
+  font-size: 15px;
+  margin-bottom: 8px;
+}
+
+.category-card ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.category-card ul li {
+  font-size: 14px;
+  margin: 4px 0;
+  color: #555;
+}
+
+/* Pikë ndarëse para nënkategorive */
+.category-card ul li::before {
+  content: "•";
+  color: #ff6600;
+  font-weight: bold;
+  margin-right: 5px;
+}
+
+/* Linku më elegant */
+.category-card a {
+  color: #2563eb;
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+
+.category-card a:hover {
+  color: #ff6600;
+  text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+  .category-item {
+    width: 180px !important;
+  }
+}
+
+
+
+.filter-box h4 {
+  font-weight: 600;
+  color: #1a1a1a;
+}
+
+.filter-box select {
+  min-width: 200px;
+  border-radius: 8px;
+  padding: 8px 10px;
+}
+
+.filter-box button {
+  padding: 8px 18px;
+  border-radius: 8px;
+  transition: 0.3s;
+}
+
+.filter-box button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+
+
+
+
+.filter-box {
+  background: var(--bs-light);
+  border: 1px solid #eaeaea;
+}
+
+.filter-box label {
+  color: #333;
+}
+
+.filter-box select {
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 0.95rem;
+}
+
+.filter-box button {
+  padding: 8px 18px;
+  font-weight: 500;
+}
+
+
+
+/* ============================= */
+/*       FILTER + CATEGORY       */
+/* ============================= */
+
+/* Filtri i makinave */
+.filter-box {
+  background: var(--bs-body-bg, #fff);
+  border-radius: 16px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: background 0.3s, color 0.3s;
+}
+
+.filter-box h4 {
+  font-weight: 600;
+  color: var(--bs-body-color, #222);
+}
+
+/* Dropdown-at */
+.filter-box select {
+  min-width: 200px;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.filter-box select:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+/* Butoni “Kërko pjesë” */
+#filterSearch {
+  padding: 0.5rem 1.5rem;
+  border-radius: 8px;
+  font-weight: 500;
+  transition: 0.2s;
+}
+
+#filterSearch:disabled {
+  background: #999 !important;
+  border: none;
+}
+
+/* ============================= */
+/*        CATEGORY HEADER        */
+/* ============================= */
+.category-header {
+  transition: color 0.3s, background 0.3s;
+}
+
+.category-header h2 {
+  font-weight: 700;
+  font-size: 1.6rem;
+  margin-bottom: 0.3rem;
+}
+
+.category-header p {
+  color: #777;
+  font-size: 0.95rem;
+  transition: color 0.3s;
+}
+
+.text-highlight {
+  color: #007bff;
+}
+
+/* ============================= */
+/*       CATEGORY CARDS          */
+/* ============================= */
+.category-scroll {
+  display: flex;
+  overflow-x: auto;
+  gap: 1rem;
+  padding-bottom: 0.5rem;
+}
+
+.category-card {
+  border-radius: 12px;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.category-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+}
+
+.category-card img {
+  transition: transform 0.3s;
+}
+
+.category-card:hover img {
+  transform: scale(1.05);
+}
+
+.category-card a {
+  transition: color 0.2s;
+}
+
+.category-card a:hover {
+  color: #0056b3;
+}
+
+
+
+
+/* 🔎 Stili për search bar në navbar */
+.search-form {
+  flex-grow: 1;
+  justify-content: center;
+}
+
+.search-input {
+  border-radius: 50px;
+  padding: 8px 18px;
+  border: 1px solid #ccc;
+  transition: all 0.2s ease;
+  width: 100%;
+}
+
+.search-input:focus {
+  outline: none;
+  border-color: #007bff;
+  box-shadow: 0 0 6px rgba(0, 123, 255, 0.3);
+}
+
+.search-btn {
+  border-radius: 50px;
+  padding: 6px 18px;
+  font-weight: 500;
+}
+
+/* Për mobile */
+@media (max-width: 768px) {
+  .search-form {
+    flex-direction: column;
+    max-width: 100%;
+    margin-top: 8px;
+  }
+
+  .search-input {
+    width: 100%;
+    margin-bottom: 8px;
+  }
+
+  .search-btn {
+    width: 100%;
+  }
+}
+
+
+.product-card .short-description {
+  display: -webkit-box;
+  display: box;
+  -webkit-box-orient: vertical;
+  box-orient: vertical;
+
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-height: 38px;
+}
+
+.short-description {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+
+    line-clamp: 2;          /* standard (future-proof) */
+    -webkit-line-clamp: 2;  /* Chrome, Edge, Safari */
+
+    line-height: 1.6;
+    max-height: calc(1.6em * 2);
+}
+
+
+
+.uniform-btn {
+    min-width: 180px;   /* të dy butonat marrin të njëjtën gjerësi */
+    font-size: 18px;    /* font identik */
+    padding: 14px 28px; /* madhësi exacte */
+}
+
+
+
+/* =========================
+   BACK BUTTON (DARK MODE)
+   ========================= */
+.back-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+
+    background-color: #1f2225;     /* dark bg */
+    color: #ffffff;
+    border: 1px solid #2f3336;
+
+    padding: 10px 16px;
+    border-radius: 10px;
+
+    font-size: 15px;
+    font-weight: 500;
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+}
+
+/* Arrow icon */
+.back-btn .arrow {
+    font-size: 18px;
+    transition: transform 0.25s ease;
+}
+
+/* Hover dark */
+.back-btn:hover {
+    background-color: #2a2e32;
+    border-color: #4c5fff;
+    color: #ffffff;
+}
+
+.back-btn:hover .arrow {
+    transform: translateX(-5px);
+}
+
+
+/* =========================
+   BACK BUTTON (LIGHT MODE)
+   ========================= */
+body.light-mode .back-btn {
+    background-color: #ffffff;
+    color: #111;
+    border: 1px solid #ccc;
+}
+
+/* Hover light */
+body.light-mode .back-btn:hover {
+    background-color: #f1f1f1;
+    border-color: #4c5fff;
+    color: #000;
+}
+
+
+.btn-outline-light{
+    border: 1px solid #ccc;
+    background-color: #ffffff;
+    color: #111;
+}
+
+/* Wrapper i fotos – i njëjtë për të gjitha */
+.product-img-wrap {
+    height: 220px;                 /* LARTËSI FIX */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+/* Vetë imazhi */
+.product-img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;           /* ⭐ KY ËSHTË SEKRETI */
+}
+
+
+/* =========================
+   CATEGORY LIST – MOBILE FIX
+   ========================= */
+@media (max-width: 768px) {
+
+  .category-item {
+    flex-direction: column;     /* stack vertical */
+    align-items: flex-start;
+  }
+
+  .list-img {
+    width: 100%;
+    height: 180px;
+    margin-bottom: 10px;
+  }
+
+  .list-img img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+
+  .list-info {
+    width: 100%;
+    margin-left: 0 !important;
+  }
+
+  .list-actions {
+    width: 100%;
+    margin-left: 0 !important;
+    margin-top: 10px;
+  }
+
+  .list-btn {
+    width: 100%;
+    font-size: 14px;
+  }
+
+}
+@media (max-width: 768px) {
+  .product-title-link {
+    font-size: 16px;
+  }
+}
+
+
+
+
+/* =========================
+   DARK MODE – TEXT FIX
+   ========================= */
+
+body:not(.light-mode) .category-item {
+  color: #e4e6eb; /* tekst bazë i lexueshëm */
+}
+
+/* Titulli i produktit */
+body:not(.light-mode) .category-item .product-title-link {
+  color: #9ec5fe; /* blu e butë, e lexueshme */
+}
+
+body:not(.light-mode) .category-item .product-title-link:hover {
+  color: #cfe2ff;
+}
+
+/* Përshkrimi */
+body:not(.light-mode) .category-item p,
+body:not(.light-mode) .category-item small {
+  color: #cfd2d6;
+}
+
+/* Çmimi */
+body:not(.light-mode) .category-item .text-success {
+  color: #4ade80 !important; /* green e qartë */
+}
+
+
+
+/* =========================
+   BOOTSTRAP text-muted FIX – DARK MODE
+   ========================= */
+
+/* Për category list */
+body:not(.light-mode) .category-item .text-muted {
+  color: #cfd2d6 !important;
+}
+
+/* Për category cards */
+body:not(.light-mode) .category-card .text-muted {
+  color: #cfd2d6 !important;
+}
+
+/* Për product details */
+body:not(.light-mode) .product-card-wrapper .text-muted {
+  color: #cfd2d6 !important;
+}
+
+/* Për çdo text-muted tjetër në dark mode (fallback) */
+body:not(.light-mode) .text-muted {
+  color: #cfd2d6 !important;
+}
+
+
+/* =========================
+   CATEGORY CARD TITLE – DARK MODE FIX
+   ========================= */
+
+body:not(.light-mode) .category-card h6 {
+  color: #e4e6eb !important; /* e bardhë e butë */
+}
+
+/* Category card list items – dark mode */
+body:not(.light-mode) .category-card ul li {
+  color: #cfd2d6 !important;
+}
+
+
+/* =========================
+   THEME TOGGLE BUTTON – DARK MODE FIX
+   ========================= */
+
+body:not(.light-mode) #themeToggle {
+  background-color: #1f2225;
+  color: #e4e6eb;
+  border: 1px solid #4c5fff;
+}
+
+/* Hover */
+body:not(.light-mode) #themeToggle:hover {
+  background-color: #2a2e32;
+  border-color: #6ea8fe;
+  color: #ffffff;
+}
+
+body:not(.light-mode) #themeToggle {
+  box-shadow: 0 0 0 1px rgba(76,95,255,0.35);
+}
+
+
+body:not(.light-mode) .category-card a {
+  color: #9ec5fe;
+}
+
+body:not(.light-mode) .category-card a:hover {
+  color: #cfe2ff;
+}
+
+
+
+/* =========================
+   CATEGORY CARDS – DARK MODE FIX (FINAL)
+   ========================= */
+
+/* Titulli kryesor i kategorisë */
+body:not(.light-mode) .category-card h6,
+body:not(.light-mode) .category-card h6 a {
+  color: #9ec5fe !important;
+}
+
+
+body:not(.light-mode) .category-card ul li,
+body:not(.light-mode) .category-card ul li a {
+  color: #cfd2d6 !important;
+}
+
+body:not(.light-mode) .category-card a:hover {
+  color: #cfe2ff !important;
+}
+
+
+body:not(.light-mode) .category-card {
+  background: linear-gradient(145deg, #1f2225, #1b1e21) !important;
+  border: 1px solid rgba(90,160,255,0.35);
+}
+
+
+
+
+body:not(.light-mode) .cart-item {
+  background: #1f2225 !important;
+  border: 1px solid rgba(90,160,255,0.25);
+  color: #e4e6eb;
+  border-radius: 12px;
+}
+
+
+body:not(.light-mode) .cart-item h5,
+body:not(.light-mode) .cart-item h6 {
+  color: #9ec5fe !important;
+}
+
+
+body:not(.light-mode) .cart-item p,
+body:not(.light-mode) .cart-item small {
+  color: #cfd2d6 !important;
+}
+
+
+body:not(.light-mode) .cart-item .text-success,
+body:not(.light-mode) .cart-item .price {
+  color: #4ade80 !important;
+  font-weight: 700;
+}
+
+
+body:not(.light-mode) .cart-item select {
+  background: #111315;
+  color: #e4e6eb;
+  border: 1px solid #2f3336;
+}
+
+
+body:not(.light-mode) .cart-item a.text-danger {
+  color: #f87171 !important;
+}
+
+
+
+body:not(.light-mode) .cart-summary {
+  background: #1f2225 !important;
+  color: #e4e6eb;
+  border: 1px solid rgba(90,160,255,0.35);
+  border-radius: 14px;
+}
+
+body:not(.light-mode) .cart-summary h5,
+body:not(.light-mode) .cart-summary strong {
+  color: #ffffff;
+}
+
+
+body:not(.light-mode) .cart-summary .btn-primary {
+  background: #2563eb;
+  border-color: #2563eb;
+}
+
+body:not(.light-mode) .cart-summary .btn-primary:hover {
+  background: #1d4ed8;
+}
+
+
+
+
+body:not(.light-mode) .cart-summary .btn-primary {
+  background-color: #0d6efd !important;
+  border-color: #0d6efd !important;
+  color: #ffffff !important;
+
+  /* Bootstrap variables override */
+  --bs-btn-bg: #0d6efd;
+  --bs-btn-border-color: #0d6efd;
+  --bs-btn-color: #ffffff;
+  --bs-btn-hover-bg: #0b5ed7;
+  --bs-btn-hover-border-color: #0b5ed7;
+}
+
+
+body:not(.light-mode) .cart-summary .btn-primary:hover {
+  background-color: #0b5ed7 !important;
+  border-color: #0b5ed7 !important;
+}
+
+
+.admin-panel-btn {
+    color: #ff4d4d !important;
+    font-weight: 600;
+    border: 1px solid #ff4d4d;
+    padding: 6px 10px;
+    border-radius: 8px;
+}
+
+.admin-panel-btn:hover {
+    background-color: #ff4d4d;
+    color: #fff !important;
+    text-decoration: none;
+}
