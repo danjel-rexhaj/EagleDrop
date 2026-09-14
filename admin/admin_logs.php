@@ -43,7 +43,7 @@ $stmt = $conn->query("
 
 <script>
 function goBack() {
-    if (document.referrer) {
+    if (window.history.length > 1) {
         window.history.back();
     } else {
         window.location.href = 'index.php';

@@ -58,7 +58,7 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <script>
 function goBack() {
-    if (document.referrer) {
+    if (window.history.length > 1) {
         window.history.back();
     } else {
         window.location.href = 'index.php';

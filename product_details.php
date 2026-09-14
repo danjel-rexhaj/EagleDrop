@@ -17,6 +17,22 @@ if (!$product) {
     include 'includes/footer.php';
     exit;
 }
+
+/* Ndaj pershkrimin ne tekst te lire dhe specifikime tip "Emri: Vlera" */
+$descLines = preg_split('/\r\n|\r|\n/', trim($product['description'] ?? ''));
+$descText = [];
+$specs = [];
+foreach ($descLines as $line) {
+    $line = trim($line);
+    if ($line === '') {
+        continue;
+    }
+    if (preg_match('/^([^:]{2,40}):\s*(.+)$/u', $line, $m)) {
+        $specs[] = [trim($m[1]), trim($m[2])];
+    } else {
+        $descText[] = $line;
+    }
+}
 ?>
 <div class="container mt-3">
     <button class="back-btn" onclick="goBack()">
@@ -27,7 +43,7 @@ if (!$product) {
 
 <script>
 function goBack() {
-    if (document.referrer) {
+    if (window.history.length > 1) {
         window.history.back();
     } else {
         window.location.href = 'index.php';
@@ -63,13 +79,28 @@ function goBack() {
 
                 <h2 class="fw-bold mb-3"><?= htmlspecialchars($product['title']) ?></h2>
 
-                <p class="text-muted" style="font-size: 1.05rem; line-height: 1.6;">
-                    <?= nl2br(htmlspecialchars($product['description'])) ?>
-                </p>
-
-                <h3 class="text-success fw-bold mb-4">
+                <h3 class="text-success fw-bold mb-3">
                     €<?= number_format($product['price'], 2) ?>
                 </h3>
+
+                <?php if ($descText): ?>
+                    <p class="text-muted product-free-text">
+                        <?= nl2br(htmlspecialchars(implode("\n", $descText))) ?>
+                    </p>
+                <?php endif; ?>
+
+                <?php if ($specs): ?>
+                    <table class="table table-sm spec-table mb-4">
+                        <tbody>
+                            <?php foreach ($specs as [$specKey, $specValue]): ?>
+                                <tr>
+                                    <th><?= htmlspecialchars($specKey) ?></th>
+                                    <td><?= htmlspecialchars($specValue) ?></td>
+                                </tr>
+                            <?php endforeach; ?>
+                        </tbody>
+                    </table>
+                <?php endif; ?>
 
 
                 <div class="d-flex gap-3">
@@ -184,6 +215,52 @@ body:not(.light-mode) .product-card-wrapper img {
   font-size: 18px;
   font-weight: 400;
   border-radius: 10px;
+}
+
+.product-free-text {
+  font-size: 1.02rem;
+  line-height: 1.6;
+}
+
+.spec-table {
+  border-radius: 10px;
+  overflow: hidden;
+  border: 1px solid rgba(0,0,0,0.08);
+}
+
+.spec-table th,
+.spec-table td {
+  padding: 10px 14px;
+  vertical-align: middle;
+  font-size: 0.92rem;
+}
+
+.spec-table th {
+  width: 45%;
+  color: #6c757d;
+  font-weight: 600;
+  background: rgba(0,0,0,0.03);
+}
+
+.spec-table tbody tr:nth-child(odd) {
+  background: rgba(0,0,0,0.015);
+}
+
+body:not(.light-mode) .spec-table {
+  border-color: rgba(90,160,255,0.2);
+}
+
+body:not(.light-mode) .spec-table th {
+  color: #9ec5fe;
+  background: rgba(90,160,255,0.08);
+}
+
+body:not(.light-mode) .spec-table td {
+  color: #cfd2d6;
+}
+
+body:not(.light-mode) .spec-table tbody tr:nth-child(odd) {
+  background: rgba(255,255,255,0.02);
 }
 
 </style>

@@ -35,7 +35,9 @@ $users = $conn->query("SELECT * FROM users ORDER BY id DESC");
 
 <script>
 function goBack() {
-    if (document.referrer) {
+    if (window.history.length > 1) {
+        window.history.back();
+    } else {
         window.location.href = 'dashboard.php';
     }
 }
