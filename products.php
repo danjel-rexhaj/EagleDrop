@@ -68,7 +68,7 @@ function goBack() {
 
 
 
-<div class="container">
+<div class="container px-4 px-md-5 pb-5">
 
 <!-- ============================= -->
 <!--     KATEGORITË E PJESËVE     -->
