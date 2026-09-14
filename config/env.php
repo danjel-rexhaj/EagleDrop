@@ -20,10 +20,12 @@ if (!defined('ENV_FILE_LOADED')) {
     }
 }
 
-function env(string $key, $default = null) {
-    $value = getenv($key);
-    if ($value === false) {
-        $value = $_ENV[$key] ?? $_SERVER[$key] ?? false;
+if (!function_exists('env')) {
+    function env(string $key, $default = null) {
+        $value = getenv($key);
+        if ($value === false) {
+            $value = $_ENV[$key] ?? $_SERVER[$key] ?? false;
+        }
+        return $value !== false && $value !== null && $value !== '' ? $value : $default;
     }
-    return $value !== false && $value !== null && $value !== '' ? $value : $default;
 }
