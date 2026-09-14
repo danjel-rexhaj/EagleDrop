@@ -297,16 +297,16 @@ $fallback_products = $stmt_fb->fetchAll(PDO::FETCH_ASSOC);
     <h5>ℹ Produkte qe i pershtaten automjetit tuaj.</h5>
 </div>
 
-<div class="row">
+<div class="row g-4 justify-content-center">
 <?php foreach ($fallback_products as $p): ?>
-  <div class="col-6 col-lg-3 col-md-4 mb-4">
+  <div class="col-6 col-md-4 col-lg-4">
 
     <div class="card shadow-sm h-100 product-card product-click p-2"
          data-href="product_details.php?id=<?= $p['id'] ?>">
 
       <img src="assets/uploads/<?= htmlspecialchars($p['image']) ?>"
            class="card-img-top"
-           style="height:200px; object-fit:cover">
+           style="height:180px; object-fit:cover">
 
       <div class="card-body d-flex flex-column justify-content-between">
 
