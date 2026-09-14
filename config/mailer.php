@@ -4,6 +4,7 @@ require_once __DIR__ . '/env.php';
 function sendViaSendGrid($toEmail, $subject, $htmlBody) {
     $apiKey = env('SENDGRID_API_KEY');
     if (!$apiKey) {
+        error_log("SendGrid error: SENDGRID_API_KEY is not set");
         return false;
     }
 
