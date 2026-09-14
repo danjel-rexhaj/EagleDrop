@@ -297,34 +297,34 @@ $fallback_products = $stmt_fb->fetchAll(PDO::FETCH_ASSOC);
     <h5>ℹ Produkte qe i pershtaten automjetit tuaj.</h5>
 </div>
 
-<div class="row g-4 justify-content-center">
+<div class="row g-3 justify-content-center">
 <?php foreach ($fallback_products as $p): ?>
-  <div class="col-6 col-md-4 col-lg-4">
+  <div class="col-6 col-md-4 col-lg-3">
 
-    <div class="card shadow-sm h-100 product-card product-click p-2"
+    <div class="card shadow-sm h-100 product-card product-card-sm product-click p-2"
          data-href="product_details.php?id=<?= $p['id'] ?>">
 
       <img src="assets/uploads/<?= htmlspecialchars($p['image']) ?>"
            class="card-img-top"
-           style="height:180px; object-fit:cover">
+           style="height:110px; object-fit:cover">
 
-      <div class="card-body d-flex flex-column justify-content-between">
+      <div class="card-body d-flex flex-column justify-content-between p-2">
 
         <div>
-          <h6 class="text-primary">
+          <h6 class="text-primary small mb-1">
             <?= htmlspecialchars($p['title']) ?>
           </h6>
 
-          <p class="small text-muted short-description">
+          <p class="small text-muted short-description mb-1">
             <?= htmlspecialchars($p['description']) ?>
           </p>
 
-          <h5 class="text-success mb-2">
+          <h6 class="text-success fw-bold mb-2">
             €<?= number_format($p['price'], 2) ?>
-          </h5>
+          </h6>
         </div>
 
-        <div class="d-flex justify-content-between align-items-center mt-auto">
+        <div class="d-flex justify-content-between align-items-center mt-auto gap-1">
           <button class="btn btn-sm btn-outline-success"
                   onclick="event.stopPropagation(); addToCart(<?= $p['id'] ?>)">
             Add to Cart
@@ -433,6 +433,21 @@ function scrollCategories(direction) {
 .product-card {
   border-radius: 14px;
   transition: 0.2s ease-in-out;
+}
+
+.product-card-sm .short-description {
+  height: 32px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  font-size: 0.78rem;
+}
+
+.product-card-sm .btn-sm {
+  font-size: 0.72rem;
+  padding: 0.25rem 0.5rem;
 }
 
 .product-card:hover {
