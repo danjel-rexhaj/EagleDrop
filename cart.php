@@ -54,7 +54,7 @@ function goBack() {
 <div class="container mt-4">
     <div class="row">
 
-        <div class="col-md-8">
+        <div class="col-12 col-md-8">
             <h3 class="mb-3">Shporta juaj</h3>
 
             <?php foreach ($items as $p): 
@@ -114,7 +114,7 @@ function goBack() {
         </div>
 
        
-        <div class="col-md-4">
+        <div class="col-12 col-md-4">
 
             <?php
             $subtotal = 0;

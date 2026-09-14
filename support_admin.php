@@ -8,12 +8,8 @@ $role = $_SESSION['role'];
 if (!in_array($role, ['staff','admin'])) die("Access denied");
 
 
-$stmt = $conn->query("SELECT id FROM conversations WHERE type='staff' LIMIT 1");
-$staffRoomId = $stmt->fetchColumn();
-
-
 $staffUsers = $conn->prepare("
-    SELECT 
+    SELECT
         u.id,
         u.username,
         (
@@ -41,29 +37,63 @@ $staffUsers->execute(['me' => $me]);
 $staffUsers = $staffUsers->fetchAll();
 
 
-$stmt = $conn->prepare("
-    SELECT 
-        c.id,
-        u.username,
-        (
-            SELECT m.message
-            FROM messages m
-            WHERE m.conversation_id = c.id
-            ORDER BY m.created_at DESC
-            LIMIT 1
-        ) AS last_message,
-        COUNT(n.id) AS unread
-    FROM conversations c
-    JOIN users u ON u.id = c.client_id
-    LEFT JOIN notifications n
-        ON n.conversation_id = c.id
-        AND n.user_id = ?
-        AND n.is_read = 0
-    WHERE c.type = 'support'
-    GROUP BY c.id
-    ORDER BY c.created_at DESC
-");
-$stmt->execute([$me]);
+// Admin sees every client conversation (with who it's assigned to); regular
+// staff only sees the conversations assigned to them -- nobody else's clients
+// show up in their list, so they can't wander into someone else's chat.
+if ($role === 'admin') {
+    $stmt = $conn->prepare("
+        SELECT
+            c.id,
+            c.status,
+            u.username,
+            s.username AS staff_name,
+            (
+                SELECT m.message
+                FROM messages m
+                WHERE m.conversation_id = c.id
+                ORDER BY m.created_at DESC
+                LIMIT 1
+            ) AS last_message,
+            COUNT(n.id) AS unread
+        FROM conversations c
+        JOIN users u ON u.id = c.client_id
+        LEFT JOIN users s ON s.id = c.staff_id
+        LEFT JOIN notifications n
+            ON n.conversation_id = c.id
+            AND n.user_id = ?
+            AND n.is_read = 0
+        WHERE c.type = 'support'
+        GROUP BY c.id
+        ORDER BY c.created_at DESC
+    ");
+    $stmt->execute([$me]);
+} else {
+    $stmt = $conn->prepare("
+        SELECT
+            c.id,
+            c.status,
+            u.username,
+            NULL AS staff_name,
+            (
+                SELECT m.message
+                FROM messages m
+                WHERE m.conversation_id = c.id
+                ORDER BY m.created_at DESC
+                LIMIT 1
+            ) AS last_message,
+            COUNT(n.id) AS unread
+        FROM conversations c
+        JOIN users u ON u.id = c.client_id
+        LEFT JOIN notifications n
+            ON n.conversation_id = c.id
+            AND n.user_id = ?
+            AND n.is_read = 0
+        WHERE c.type = 'support' AND c.staff_id = ?
+        GROUP BY c.id
+        ORDER BY c.created_at DESC
+    ");
+    $stmt->execute([$me, $me]);
+}
 $clientConvs = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 $conversation_id = isset($_GET['c']) ? (int)$_GET['c'] : null;
@@ -96,97 +126,30 @@ if ($staff_to) {
 }
 
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && $conversation_id) {
-    $msg = trim($_POST['message']);
+// Authorization: a conversation only opens for people allowed in it -- the
+// assigned staff member (or an admin) for a client conversation, and the two
+// participants for a staff DM. Guessing another conversation's ?c=id redirects away.
+$convType = null;
+$convStatus = null;
 
-    if ($msg !== '') {
+if ($conversation_id) {
+    $stmt = $conn->prepare("SELECT client_id, staff_id, type, status FROM conversations WHERE id=?");
+    $stmt->execute([$conversation_id]);
+    $conv = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    $allowed = $conv && (
+        ($conv['type'] === 'support' && ($role === 'admin' || (int)$conv['staff_id'] === (int)$me))
+        || ($conv['type'] === 'staff' && ((int)$conv['client_id'] === (int)$me || (int)$conv['staff_id'] === (int)$me))
+    );
 
-        $conn->prepare("
-            INSERT INTO messages (conversation_id, sender_id, message)
-            VALUES (?,?,?)
-        ")->execute([$conversation_id, $me, $msg]);
-
- 
-        $stmt = $conn->prepare("
-            SELECT client_id, staff_id
-            FROM conversations
-            WHERE id=?
-        ");
-        $stmt->execute([$conversation_id]);
-        $c = $stmt->fetch();
-
-  
-
-
-        if ($role === 'client') {
-
-
-            if (!$c['staff_id']) {
-
-                try {
-                    $conn->beginTransaction();
-
-
-                    $stmt = $conn->query("
-                        SELECT id
-                        FROM users
-                        WHERE role IN ('staff','admin')
-                        ORDER BY 
-                            last_assigned_at IS NULL DESC,
-                            last_assigned_at ASC
-                        LIMIT 1
-                        FOR UPDATE
-                    ");
-                    $staff_id = $stmt->fetchColumn();
-
-                    if (!$staff_id) {
-                        $conn->rollBack();
-                        throw new Exception('No staff available');
-                    }
-
-
-                    $conn->prepare("
-                        UPDATE conversations
-                        SET staff_id = ?
-                        WHERE id = ?
-                    ")->execute([$staff_id, $conversation_id]);
-
-                    $conn->prepare("
-                        UPDATE users
-                        SET last_assigned_at = NOW()
-                        WHERE id = ?
-                    ")->execute([$staff_id]);
-
-                    $conn->commit();
-
-                } catch (Exception $e) {
-                    $conn->rollBack();
-                    exit;
-                }
-
-            } else {
-                $staff_id = $c['staff_id'];
-            }
-
-            $conn->prepare("
-                INSERT INTO notifications (user_id, conversation_id, title, message)
-                VALUES (?, ?, 'New support message', 'A client sent a message')
-            ")->execute([$staff_id, $conversation_id]);
-        }
-
-        else {
-            $conn->prepare("
-                INSERT INTO notifications (user_id, conversation_id, title, message)
-                VALUES (?, ?, 'Support reply', 'Staff replied to your message')
-            ")->execute([$c['client_id'], $conversation_id]);
-        }
+    if (!$allowed) {
+        header("Location: support_admin.php");
+        exit;
     }
 
-    header("Location: support_admin.php" . ($staff_to ? "?staff=$staff_to" : "?c=$conversation_id"));
-    exit;
+    $convType = $conv['type'];
+    $convStatus = $conv['status'];
 }
-
 
 
 $messages = [];
@@ -216,17 +179,15 @@ require "./includes/header.php";
 
 
 
-<link rel="stylesheet" href="./assets/css/chat.css">
+<link rel="stylesheet" href="./assets/css/chat.css?v=<?= filemtime(__DIR__ . '/assets/css/chat.css') ?>">
+
+<audio id="notifSound" src="./assets/sounds/notify.mp3" preload="auto"></audio>
 
 <div class="chat-container role-staff">
 <div class="chat-header">🧑‍💼 Support Panel</div>
 
 <div class="chat-admin-body">
 <div class="chat-users">
-
-<a class="pinned <?= $conversation_id==$staffRoomId?'active':'' ?>"
-   href="?c=<?= $staffRoomId ?>">📌 Staff Chat</a>
-<hr>
 
 <?php foreach($staffUsers as $s): ?>
 <a href="?staff=<?= $s['id'] ?>"
@@ -235,7 +196,7 @@ require "./includes/header.php";
 👤 <?= htmlspecialchars($s['username']) ?>
 
 <?php if ($s['unread'] > 0): ?>
-    <span class="badge bg-danger ms-1">
+    <span class="badge">
         <?= $s['unread'] ?>
     </span>
 <?php endif; ?>
@@ -251,13 +212,22 @@ require "./includes/header.php";
 
     <div class="chat-name">
         <?= htmlspecialchars($c['username']) ?>
+        <?php if ($c['status'] === 'closed'): ?>
+            <span class="status-tag">mbyllur</span>
+        <?php endif; ?>
 
         <?php if ($c['unread'] > 0): ?>
-            <span class="badge bg-danger ms-1">
+            <span class="badge">
                 <?= $c['unread'] ?>
             </span>
         <?php endif; ?>
     </div>
+
+    <?php if ($role === 'admin'): ?>
+        <div class="assigned-tag">
+            👤 Caktuar te: <strong><?= $c['staff_name'] ? htmlspecialchars($c['staff_name']) : '—' ?></strong>
+        </div>
+    <?php endif; ?>
 
     <?php if (!empty($c['last_message'])): ?>
         <div class="last-msg">
@@ -273,6 +243,16 @@ require "./includes/header.php";
 
 <div class="chat-main">
     <?php if($conversation_id): ?>
+        <?php if ($convType === 'support'): ?>
+        <div class="chat-sub-header">
+            <span id="convStatusTag" class="status-tag <?= $convStatus === 'closed' ? '' : 'hidden' ?>">
+                bisedë e mbyllur
+            </span>
+            <?php if ($convStatus === 'open'): ?>
+                <button id="closeConvBtn" class="close-conv-btn" onclick="closeConversation()">🔒 Mbyll bisedën</button>
+            <?php endif; ?>
+        </div>
+        <?php endif; ?>
         <div class="chat-messages" id="chatMessages">
             <?php foreach($messages as $m): ?>
                 <div class="message <?= $m['sender_id']==$me?'me':'other' ?>" data-id="<?= $m['id'] ?>">
@@ -294,13 +274,9 @@ require "./includes/header.php";
     </div>
 
 
-<form method="POST" class="chat-input">
-    <?php if ($is_staff_private && $staff_to): ?>
-        <input type="hidden" name="staff_to" value="<?= $staff_to ?>">
-    <?php endif; ?>
-
-    <textarea name="message" id="chatTextarea" placeholder="Write…" required></textarea>
-    <button>➤</button>
+<form class="chat-input" onsubmit="return false;">
+    <textarea id="chatTextarea" placeholder="Write…" required></textarea>
+    <button type="button" onclick="sendMessage()">➤</button>
 </form>
 
 <?php else: ?>
@@ -312,6 +288,41 @@ require "./includes/header.php";
 </div>
 
 <script>
+const notifSound = document.getElementById('notifSound');
+let lastTotalUnread = null;
+
+function refreshUnread() {
+    fetch('check_unread.php')
+        .then(r => r.json())
+        .then(data => {
+            if (lastTotalUnread !== null && data.total > lastTotalUnread && notifSound) {
+                notifSound.play().catch(() => {});
+            }
+            lastTotalUnread = data.total;
+
+            document.querySelectorAll('.chat-item .badge').forEach(b => b.remove());
+
+            data.conversations.forEach(c => {
+                if (c.conversation_id == <?= (int)($conversation_id ?? 0) ?>) return;
+
+                const link = document.querySelector(`a.chat-item[href="?c=${c.conversation_id}"]`);
+                if (link) {
+                    const nameDiv = link.querySelector('.chat-name');
+                    if (nameDiv) {
+                        const badge = document.createElement('span');
+                        badge.className = 'badge';
+                        badge.textContent = c.unread;
+                        nameDiv.appendChild(badge);
+                    }
+                }
+            });
+        });
+}
+
+refreshUnread();
+setInterval(refreshUnread, 4000);
+
+
 const chatBox = document.getElementById('chatMessages');
 const textarea = document.querySelector('.chat-input textarea');
 
@@ -347,6 +358,10 @@ if (!chatBox || !textarea) {
         })
         .then(r => r.json())
         .then(m => {
+            if (m.error) return;
+
+            updateConvStatusUI(m.status);
+
             const div = document.createElement('div');
             div.className = 'message me';
             div.dataset.id = m.id;
@@ -378,8 +393,10 @@ if (!chatBox || !textarea) {
     setInterval(() => {
         fetch(`fetch_messages.php?conversation_id=<?= $conversation_id ?>&last_id=${lastMessageId}`)
             .then(r => r.json())
-            .then(messages => {
-                messages.forEach(m => {
+            .then(data => {
+                updateConvStatusUI(data.status);
+
+                data.messages.forEach(m => {
                     const div = document.createElement('div');
                     div.className = 'message ' + (m.sender_id == <?= $me ?> ? 'me' : 'other');
                     div.dataset.id = m.id;
@@ -398,17 +415,35 @@ if (!chatBox || !textarea) {
                     lastMessageId = m.id;
                 });
 
-                if (messages.length) scrollBottom();
+                if (data.messages.length) scrollBottom();
             });
     }, 2000);
 
 }
 
+function updateConvStatusUI(status) {
+    const tag = document.getElementById('convStatusTag');
+    const btn = document.getElementById('closeConvBtn');
+    if (!tag) return;
+
+    tag.classList.toggle('hidden', status !== 'closed');
+    if (btn) btn.classList.toggle('hidden', status === 'closed');
+}
+
+function closeConversation() {
+    fetch('close_conversation.php', {
+        method: 'POST',
+        headers: {'Content-Type':'application/x-www-form-urlencoded'},
+        body: `conversation_id=<?= (int)($conversation_id ?? 0) ?>`
+    })
+    .then(r => r.json())
+    .then(data => {
+        if (data.ok) updateConvStatusUI('closed');
+    });
+}
 </script>
 
 
 
 
-
 <?php require "./includes/footer.php"; ?>
-

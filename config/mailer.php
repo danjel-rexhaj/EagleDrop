@@ -5,6 +5,7 @@ use PHPMailer\PHPMailer\Exception;
 require __DIR__ . '/../PHPMailer/src/Exception.php';
 require __DIR__ . '/../PHPMailer/src/PHPMailer.php';
 require __DIR__ . '/../PHPMailer/src/SMTP.php';
+require __DIR__ . '/env.php';
 
 function sendVerificationEmail($email, $code) {
 
@@ -15,13 +16,13 @@ function sendVerificationEmail($email, $code) {
         $mail->isSMTP();
         $mail->Host       = "smtp.gmail.com";
         $mail->SMTPAuth   = true;
-        $mail->Username   = "e"; //change those
-        $mail->Password   = "h"; 
+        $mail->Username   = env('SMTP_USERNAME', 'eagledrop19@gmail.com');
+        $mail->Password   = env('SMTP_PASSWORD');
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
    
-        $mail->setFrom("e", "EagleDrop");
+        $mail->setFrom("eagledrop19@gmail.com", "EagleDrop");
         $mail->addAddress($email);
 
         $mail->isHTML(true);
@@ -85,7 +86,7 @@ function sendVerificationEmail($email, $code) {
 
 function sendResetPasswordEmail($email) {
 
-    $resetLink = "https://stalagmitical-emma-unpoached.ngrok-free.dev/myplatform/reset_password.php";
+    $resetLink = env('APP_BASE_URL', 'https://stalagmitical-emma-unpoached.ngrok-free.dev/myplatform') . '/reset_password.php';
 
     $mail = new PHPMailer(true);
 
@@ -93,12 +94,12 @@ function sendResetPasswordEmail($email) {
         $mail->isSMTP();
         $mail->Host       = "smtp.gmail.com";
         $mail->SMTPAuth   = true;
-        $mail->Username   = "em";
-        $mail->Password   = "v";
+        $mail->Username   = env('SMTP_USERNAME', 'eagledrop19@gmail.com');
+        $mail->Password   = env('SMTP_PASSWORD');
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port       = 587;
 
-        $mail->setFrom("@gmail.com", "EagleDrop Support");
+        $mail->setFrom("eagledrop19@gmail.com", "EagleDrop Support");
         $mail->addAddress($email);
 
         $mail->isHTML(true);

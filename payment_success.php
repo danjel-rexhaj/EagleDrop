@@ -1,9 +1,10 @@
 <?php
 require "./includes/auth.php";
 require "./config/database.php";
+require "./config/env.php";
 require "./vendor/autoload.php";
 
-//change this
+\Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
 
 if (!isset($_GET['session_id']) || empty($_GET['session_id'])) {

@@ -7,7 +7,7 @@ if (session_status() === PHP_SESSION_NONE) {
 }
 
 if (empty($_SESSION['user_id'])) {
-    header("Location: /myplatform/login.php");
+    header("Location: /login.php");
     exit;
 }
 
@@ -146,13 +146,13 @@ include "./includes/header.php";
         <div class="row justify-content-center">
 
 
-            <div class="col-md-4 text-center">
+            <div class="col-12 col-md-4 text-center">
                 <?php
                 $photoFile = !empty($currentUser['profile_image'])
                     ? $currentUser['profile_image']
                     : 'default_user.png';
 
-                $photo = "/myplatform/assets/uploads/" . $photoFile;
+                $photo = "/assets/uploads/" . $photoFile;
                 ?>
                 <img src="<?= htmlspecialchars($photo) ?>" class="profile-photo mb-3">
 
@@ -165,7 +165,7 @@ include "./includes/header.php";
             </div>
 
 
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
 
                 <form method="POST">
                     <input name="username" class="form-control mb-2"

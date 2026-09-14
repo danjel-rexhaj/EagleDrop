@@ -2,6 +2,7 @@
 session_start();
 require "./config/database.php";
 require "./config/mailer.php";
+require "./config/crm.php";
 
 $message = "";
 
@@ -31,6 +32,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
              VALUES (?,?,?,?,?,?,?)"
         );
         $insert->execute([$first, $last, $username, $phone, $email, $hashed, $code]);
+
+        sendLeadToCRM($first, $last, $email, $phone);
 
         sendVerificationEmail($email, $code);
 

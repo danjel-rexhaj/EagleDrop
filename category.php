@@ -60,6 +60,20 @@ if ($engine !== '') {
     $params[] = "%$engine%";
 }
 
+
+/* Markat e disponueshme per kete kategori/automjet, para se te aplikohet filtri i markes */
+$brandStmt = $conn->prepare("$sql AND brand IS NOT NULL AND brand <> '' ORDER BY brand ASC");
+$brandStmt->execute($params);
+$availableBrands = array_values(array_unique(array_column($brandStmt->fetchAll(PDO::FETCH_ASSOC), 'brand')));
+
+
+$brand = trim($_GET['brand'] ?? '');
+
+if ($brand !== '') {
+    $sql .= " AND brand = ?";
+    $params[] = $brand;
+}
+
 $stmt = $conn->prepare($sql);
 $stmt->execute($params);
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -90,6 +104,30 @@ function goBack() {
     <h2 class="fw-bold mb-4 text-center">
         🔧 Produkte per kategorine: <?= htmlspecialchars($catName) ?>
     </h2>
+
+    <?php if (!empty($availableBrands)): ?>
+    <form method="GET" class="brand-filter-bar d-flex align-items-center flex-wrap gap-2 mb-4">
+        <input type="hidden" name="category" value="<?= htmlspecialchars($category_id) ?>">
+        <input type="hidden" name="include_sub" value="<?= htmlspecialchars($include_sub) ?>">
+        <input type="hidden" name="maker" value="<?= htmlspecialchars($maker) ?>">
+        <input type="hidden" name="model" value="<?= htmlspecialchars($model) ?>">
+        <input type="hidden" name="model_id" value="<?= htmlspecialchars($model_id) ?>">
+        <input type="hidden" name="engine" value="<?= htmlspecialchars($engine) ?>">
+
+        <label for="brandSelect" class="fw-semibold small mb-0">Marka:</label>
+        <select id="brandSelect" name="brand" class="form-select form-select-sm w-auto" onchange="this.form.submit()">
+            <option value="">Te gjitha markat</option>
+            <?php foreach ($availableBrands as $b): ?>
+                <option value="<?= htmlspecialchars($b) ?>" <?= $brand === $b ? 'selected' : '' ?>><?= htmlspecialchars($b) ?></option>
+            <?php endforeach; ?>
+        </select>
+
+        <?php if ($brand !== ''): ?>
+            <a href="?category=<?= urlencode($category_id) ?>&include_sub=<?= urlencode($include_sub) ?>&maker=<?= urlencode($maker) ?>&model=<?= urlencode($model) ?>&model_id=<?= urlencode($model_id) ?>&engine=<?= urlencode($engine) ?>"
+               class="small ms-1">Fshij filtrin</a>
+        <?php endif; ?>
+    </form>
+    <?php endif; ?>
 
 <?php if (!empty($products)): ?>
 <div class="category-list">
@@ -296,6 +334,30 @@ body:not(.light-mode) .btn-outline-primary {
 body:not(.light-mode) .btn-outline-primary:hover {
   background-color: #60a5fa;
   color: #0f172a;
+}
+
+
+.brand-filter-bar a {
+  color: #dc3545;
+  text-decoration: none;
+}
+
+.brand-filter-bar a:hover {
+  text-decoration: underline;
+}
+
+body:not(.light-mode) .brand-filter-bar label {
+  color: #e4e6eb;
+}
+
+body:not(.light-mode) .brand-filter-bar select {
+  background-color: #1f2225;
+  color: #e4e6eb;
+  border-color: rgba(90,160,255,0.35);
+}
+
+body:not(.light-mode) .brand-filter-bar a {
+  color: #ff8a8a;
 }
 
 

@@ -44,9 +44,11 @@ if (isset($_SESSION['user_id'])) {
     <meta charset="UTF-8">
     <title>EagleDrop</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="/myplatform/assets/css/style.css">
-    <script src="/myplatform/assets/js/theme.js" defer></script>
+    <link rel="stylesheet" href="/assets/css/style.css">
+    <script src="/assets/js/theme.js" defer></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" defer></script>
 
 </head>
 <body>
@@ -54,18 +56,27 @@ if (isset($_SESSION['user_id'])) {
     <div class="container">
 
     
-        <a class="navbar-brand insta-logo" href="/myplatform/index.php">
+        <a class="navbar-brand insta-logo" href="/index.php">
             EagleDrop
         </a>
+
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+            data-bs-target="#mainNavCollapse" aria-controls="mainNavCollapse"
+            aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="mainNavCollapse">
+
         <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'admin'): ?>
-            <a href="/myplatform/admin/dashboard.php" 
+            <a href="/admin/dashboard.php"
               class="nav-link admin-panel-btn">
                 🛠 Admin
             </a>
         <?php endif; ?>
-      
+
         <form class="d-flex mx-auto search-form position-relative"
-            action="/myplatform/search.php"
+            action="/search.php"
             method="GET"
             style="max-width: 500px; flex: 1;">
 
@@ -88,12 +99,12 @@ if (isset($_SESSION['user_id'])) {
      
           <div class="d-flex align-items-center gap-3">
 
-              <a href="/myplatform/index.php" class="nav-icon">
+              <a href="/index.php" class="nav-icon">
                   <i class="bi bi-house-door"></i>
               </a>
 
               <?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'user'): ?>
-                  <a href="/myplatform/support.php" class="nav-link position-relative">
+                  <a href="#" onclick="if(window.openSupportWidget){openSupportWidget();}return false;" class="nav-link position-relative">
                       💬 Support
 
                       <?php if ($notifCount > 0): ?>
@@ -104,7 +115,7 @@ if (isset($_SESSION['user_id'])) {
                   </a>
 
               <?php elseif (isset($_SESSION['role']) && in_array($_SESSION['role'], ['staff','admin'])): ?>
-                  <a href="/myplatform/support_admin.php" class="nav-link staff position-relative">
+                  <a href="/support_admin.php" class="nav-link staff position-relative">
                       🧑‍💼 Messages
                       <?php if ($notifCount > 0): ?>
                           <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
@@ -113,7 +124,7 @@ if (isset($_SESSION['user_id'])) {
                       <?php endif; ?>
                   </a>
               <?php endif; ?>
-            <a href="/myplatform/cart.php" class="nav-icon position-relative">
+            <a href="/cart.php" class="nav-icon position-relative">
             <i class="bi bi-cart2"></i>
 
             <?php if ($cartCount > 0): ?>
@@ -124,7 +135,7 @@ if (isset($_SESSION['user_id'])) {
             </a>
 
 
-            <a href="/myplatform/profile.php" class="nav-icon">
+            <a href="/profile.php" class="nav-icon">
                 <i class="bi bi-person-circle"></i>
             </a>
 
@@ -134,11 +145,13 @@ if (isset($_SESSION['user_id'])) {
             </button>
             
             <?php if(isset($_SESSION['user_id'])): ?>
-                <a href="/myplatform/logout.php" class="logout-btn">Dil</a>
+                <a href="/logout.php" class="logout-btn">Dil</a>
             <?php else: ?>
-                <a href="/myplatform/login.php" class="btn btn-primary btn-sm">Login</a>
-                <a href="/myplatform/register.php" class="btn btn-success btn-sm">Regjistrohu</a>
+                <a href="/login.php" class="btn btn-primary btn-sm">Login</a>
+                <a href="/register.php" class="btn btn-success btn-sm">Regjistrohu</a>
             <?php endif; ?>
+
+        </div>
 
         </div>
 
@@ -222,7 +235,7 @@ if (searchInput) {
       return;
     }
 
-    fetch("/myplatform/search_products.php?q=" + encodeURIComponent(q))
+    fetch("/search_products.php?q=" + encodeURIComponent(q))
       .then(res => res.json())
       .then(data => {
         searchResults.innerHTML = "";
@@ -234,7 +247,7 @@ if (searchInput) {
           data.forEach(p => {
             searchResults.innerHTML += `
               <div class="search-item"
-                   onclick="window.location='/myplatform/product_details.php?id=${p.id}'">
+                   onclick="window.location='/product_details.php?id=${p.id}'">
                 <strong>${p.title}</strong><br>
                 <small>€${p.price}</small>
               </div>
@@ -254,3 +267,7 @@ if (searchInput) {
   });
 }
 </script>
+
+<?php if (isset($_SESSION['role']) && $_SESSION['role'] === 'user'): ?>
+    <?php require __DIR__ . '/chat_widget.php'; ?>
+<?php endif; ?>

@@ -52,14 +52,14 @@ function goBack() {
         <div class="row align-items-start g-4">
 
 
-            <div class="col-md-6 d-flex justify-content-center">
+            <div class="col-12 col-md-6 d-flex justify-content-center">
                 <img src="assets/uploads/<?= htmlspecialchars($product['image']) ?>" 
                     class="img-fluid rounded"
                     style="max-height: 420px; object-fit: contain;">
             </div>
 
 
-            <div class="col-md-6">
+            <div class="col-12 col-md-6">
 
                 <h2 class="fw-bold mb-3"><?= htmlspecialchars($product['title']) ?></h2>
 

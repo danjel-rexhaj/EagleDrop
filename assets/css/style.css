@@ -2,39 +2,54 @@
    1. GLOBAL THEME SETTINGS (Dark / Light Mode)
    ============================================================ */
 
+html, body {
+    overflow-x: hidden;
+    max-width: 100%;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    line-height: 1.6;
+}
+
 body {
     background-color: #1a1c1d;
     color: #fff;
-    transition: 0.3s ease-in-out;
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-size: 16px;
 }
 
 body.light-mode {
-    background-color: #f4f4f4 !important;
-    color: #000 !important;
+    background-color: #f5f5f5 !important;
+    color: #111 !important;
 }
 
 /* Placeholder colors */
 input::placeholder {
-    color: #e5e5e5 !important;
+    color: #b0b3b8 !important;
     opacity: 1 !important;
 }
 
 body.light-mode input::placeholder {
-    color: #777 !important;
+    color: #888 !important;
 }
 
 /* Light mode - Inputs */
 body.light-mode input.form-control {
     background-color: #fff !important;
-    color: #000 !important;
-    border: 1px solid #aaa !important;
+    color: #111 !important;
+    border: 1px solid #d0d0d0 !important;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+}
+
+body.light-mode input.form-control:focus {
+    border-color: #4c5fff !important;
+    box-shadow: 0 0 0 0.15rem rgba(76, 95, 255, 0.25) !important;
 }
 
 /* Light mode - Theme toggle button */
 body.light-mode #themeToggle {
-    border-color: #444 !important;
-    color: #222 !important;
-    background-color: #f8f8f8 !important;
+    border-color: #d0d0d0 !important;
+    color: #111 !important;
+    background-color: #fff !important;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
 }
 
 
@@ -45,24 +60,29 @@ body.light-mode #themeToggle {
 .login-card,
 .register-card {
     background-color: #1c1f22;
-    padding: 35px;
-    border-radius: 12px;
-    width: 380px;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    padding: 40px;
+    border-radius: 16px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 body.light-mode .login-card,
 body.light-mode .register-card {
     background-color: #ffffff !important;
-    color: #000 !important;
-    box-shadow: 0 0 15px rgba(0,0,0,0.15);
+    color: #111 !important;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+    border: 1px solid #e0e0e0;
 }
 
 body.light-mode .login-card input.form-control,
 body.light-mode .register-card input.form-control {
-    background-color: #f3f3f3 !important;
-    color: #000 !important;
-    border: 1px solid #ccc !important;
+    background-color: #f9f9f9 !important;
+    color: #111 !important;
+    border: 1px solid #d5d5d5 !important;
+    transition: all 0.2s ease;
 }
 
 .app-title {
@@ -79,28 +99,41 @@ body.light-mode .app-title {
 /* Inputs */
 input.form-control {
     background-color: #25282b;
-    border: 1px solid #555;
+    border: 1px solid #444;
     color: #fff !important;
+    padding: 12px 16px;
+    font-size: 15px;
+    transition: all 0.2s ease;
+    border-radius: 8px;
 }
 
 input.form-control:focus {
-    background-color: #24282c;
-    border-color: #4c5fff;
+    background-color: #2a2e32;
+    border-color: #5566ff;
     color: #fff;
+    box-shadow: 0 0 0 0.15rem rgba(76, 95, 255, 0.25);
+    outline: none;
 }
 
 /* Buttons */
 .btn-login,
 .btn-register {
-    background-color: #4c5fff;
+    background: linear-gradient(135deg, #4c5fff, #5566ff);
     width: 100%;
     color: #fff;
     font-weight: 600;
+    padding: 12px 16px;
+    font-size: 15px;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
 }
 
 .btn-login:hover,
 .btn-register:hover {
-    background-color: #3a46d1;
+    background: linear-gradient(135deg, #3a46d1, #4555dd);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 95, 255, 0.4);
 }
 
 
@@ -114,74 +147,101 @@ input.form-control:focus {
 }
 
 body.dark-mode .nav-search input::placeholder {
-    color: #ccc !important;
+    color: #aaa !important;
 }
 
 /* Navbar Logo */
 .navbar-brand {
     font-family: "Billabong", cursive;
-    font-size: 40px;
+    font-size: 36px;
     font-weight: bold;
-    margin-left: 15px;
+    margin-left: 12px;
     color: #fff !important;
+    transition: all 0.3s ease;
+    letter-spacing: 0.5px;
+}
+
+.navbar-brand:hover {
+    opacity: 0.9;
+    transform: scale(1.02);
 }
 
 body.light-mode .navbar-brand {
-    color: #000 !important;
+    color: #111 !important;
 }
 
 /* Navbar Icons */
 .nav-icon {
     font-size: 22px;
     color: #fff !important;
-    transition: 0.2s;
+    transition: all 0.2s ease;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
 }
 
 body.light-mode .nav-icon {
-    color: #000 !important;
+    color: #111 !important;
 }
 
 .nav-icon:hover {
-    opacity: 0.7;
+    opacity: 0.8;
+    transform: scale(1.1);
 }
-
-
 
 body.light-mode .nav-search input {
-    background: #f1f1f1 !important;    /* LIGHT MODE */
-    border: 1px solid #ccc !important;
-    color: #000 !important;
+    background: #f5f5f5 !important;
+    border: 1px solid #d0d0d0 !important;
+    color: #111 !important;
+    transition: all 0.2s ease;
 }
 
-.main-nav {
-    padding: 12px 0;
-    background-color: #1b1d1f; /* ngjyra e navbar-it */
-    border-bottom: 2px solid transparent; /* vend për gradient */
-    border-image: linear-gradient(to right, #ff512f, #dd2476, #ff512f) 1;
+body.light-mode .nav-search input:focus {
+    background: #fff !important;
+    border-color: #4c5fff !important;
+    box-shadow: 0 0 0 0.15rem rgba(76, 95, 255, 0.15) !important;
 }
-
-
-
 
 /* Navbar background */
 .main-nav {
-    padding: 12px 0;
+    padding: 14px 0;
+    border-bottom: 2px solid transparent;
+    border-image: linear-gradient(to right, #ff512f, #dd2476, #ff512f) 1;
     background: linear-gradient(#1a1c1d, #1a1c1d) padding-box,
                 linear-gradient(to right, #ff512f, #dd2476, #ff512f) border-box;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
 body.light-mode .main-nav {
-    background: linear-gradient(#ffffff, #ffffff) padding-box,
+    background: linear-gradient(#fff, #fff) padding-box,
                 linear-gradient(to right, #ff512f, #dd2476, #ff512f) border-box !important;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
+/* Navbar mobile toggle */
+.navbar-toggler {
+    flex-shrink: 0;
+    display: inline-block;
+    width: 42px;
+    height: 38px;
+    padding: 0;
+    border: 1px solid rgba(255,255,255,.4);
+    border-radius: 8px;
+    background-color: transparent;
+    transition: all 0.2s ease;
+}
 
-/* Theme button */
-#themeToggle {
-    border-radius: 20px;
-    padding: 4px 12px;
-    font-size: 14px;
-    font-weight: 600;
+.navbar-toggler:hover {
+    border-color: rgba(255,255,255,.7);
+}
+
+.navbar-toggler:focus {
+    box-shadow: 0 0 0 0.15rem rgba(255,255,255,.25);
+    outline: none;
+    border-color: #4c5fff;
 }
 
 
@@ -190,67 +250,90 @@ body.light-mode .main-nav {
    ============================================================ */
 
 .profile-card {
-    max-width: 850px;
-    background: rgba(255,255,255,0.03);
-    border-radius: 14px;
-    padding: 30px;
+    max-width: 900px;
+    background: rgba(255,255,255,0.05);
+    border-radius: 18px;
+    padding: 40px;
     margin: auto;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
-    backdrop-filter: blur(4px);
+    box-shadow: 0 15px 50px rgba(0,0,0,0.5);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.1);
+    transition: all 0.3s ease;
 }
 
 body.light-mode .profile-card {
-    background: #ffffff;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    background: #fff;
+    box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+    border: 1px solid #e5e5e5;
 }
 
 .profile-photo {
-    width: 180px;
-    height: 180px;
+    width: 160px;
+    height: 160px;
     border-radius: 50%;
     object-fit: cover;
-    border: 3px solid #4c5fff;
-    box-shadow: 0 0 12px rgba(0,0,0,0.5);
-    transition: 0.25s ease;
+    border: 4px solid #4c5fff;
+    box-shadow: 0 8px 20px rgba(76, 95, 255, 0.3);
+    transition: all 0.3s ease;
 }
 
 .profile-photo:hover {
-    scale: 1.03;
-    opacity: 0.9;
+    transform: scale(1.05);
+    box-shadow: 0 12px 30px rgba(76, 95, 255, 0.4);
 }
 
 .profile-card input.form-control {
     background-color: #25282b;
-    border: 1px solid #555;
+    border: 1px solid #444;
     color: #fff;
+    padding: 12px 16px;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+}
+
+.profile-card input.form-control:focus {
+    border-color: #5566ff;
+    box-shadow: 0 0 0 0.15rem rgba(76, 95, 255, 0.25);
 }
 
 body.light-mode .profile-card input.form-control {
-    background-color: #fff;
-    color: #000;
+    background-color: #f9f9f9;
+    color: #111;
+    border: 1px solid #d5d5d5;
 }
 
 .profile-card .btn-success,
 .profile-card .btn-primary {
-    padding: 10px;
+    padding: 11px 24px;
     font-weight: 600;
+    border-radius: 8px;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.profile-card .btn-success:hover,
+.profile-card .btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
 /* Logout Button */
 .logout-btn {
     background: #ff4d4d;
     color: white !important;
-    padding: 6px 16px;
-    border-radius: 20px;
+    padding: 10px 20px;
+    border-radius: 8px;
     font-weight: 600;
     font-size: 14px;
-    transition: 0.25s ease;
+    transition: all 0.2s ease;
     border: none;
+    cursor: pointer;
 }
 
 .logout-btn:hover {
     background: #e63939;
-    transform: translateY(-1px);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(255, 77, 77, 0.3);
 }
 
 
@@ -259,96 +342,133 @@ body.light-mode .profile-card input.form-control {
 ============================== */
 
 .register-container {
-    margin-top: 40px;
+    margin-top: 60px;
     display: flex;
     flex-direction: column;
     align-items: center;
+    padding: 20px;
 }
 
 .register-box {
-    width: 350px;
+    width: 100%;
+    max-width: 380px;
     background: #1c1f22;
-    padding: 30px 35px;
-    border-radius: 12px;
+    padding: 40px;
+    border-radius: 16px;
     text-align: center;
-    box-shadow: 0 0 20px rgba(0,0,0,0.4);
+    box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 body.light-mode .register-box {
-    background: #ffffff;
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    background: #fff;
+    box-shadow: 0 5px 25px rgba(0,0,0,0.12);
+    border: 1px solid #e0e0e0;
 }
 
 .insta-title {
     font-family: "Billabong", cursive;
-    font-size: 55px;
+    font-size: 50px;
     color: #fff;
     margin-bottom: 20px;
+    letter-spacing: 1px;
 }
 
 body.light-mode .insta-title {
-    color: #000;
+    color: #111;
 }
 
 .reg-input {
     width: 100%;
-    padding: 10px 14px;
-    margin-bottom: 12px;
+    padding: 12px 16px;
+    margin-bottom: 14px;
     border-radius: 8px;
-    border: 1px solid #333;
+    border: 1px solid #444;
     background: #25282b;
     color: #fff;
+    font-size: 15px;
+    transition: all 0.2s ease;
 }
 
 .reg-input::placeholder {
-    color: #bbb;
+    color: #999;
+}
+
+.reg-input:focus {
+    border-color: #5566ff;
+    box-shadow: 0 0 0 0.15rem rgba(76, 95, 255, 0.25);
+    outline: none;
+    background: #2a2e32;
 }
 
 body.light-mode .reg-input {
-    background: #f4f4f4;
-    border: 1px solid #ccc;
-    color: #000;
+    background: #f9f9f9;
+    border: 1px solid #d5d5d5;
+    color: #111;
+}
+
+body.light-mode .reg-input::placeholder {
+    color: #999;
+}
+
+body.light-mode .reg-input:focus {
+    background: #fff;
+    border-color: #4c5fff;
 }
 
 .reg-btn {
     width: 100%;
-    background: #3897f0;
-    padding: 10px;
+    background: linear-gradient(135deg, #4c5fff, #5566ff);
+    padding: 12px;
     border: none;
     border-radius: 8px;
     font-weight: bold;
     color: white;
-    margin-top: 5px;
+    margin-top: 8px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
 }
 
 .reg-btn:hover {
-    background: #2d85d4;
+    background: linear-gradient(135deg, #3a46d1, #4555dd);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(76, 95, 255, 0.4);
 }
 
 .reg-policy {
     font-size: 12px;
-    color: #aaa;
+    color: #999;
     margin-top: 15px;
+    line-height: 1.6;
 }
 
 .login-redirect {
-    margin-top: 15px;
+    margin-top: 18px;
     padding: 20px;
-    width: 350px;
+    width: 100%;
+    max-width: 380px;
     text-align: center;
-    border-radius: 8px;
+    border-radius: 16px;
     background: #1c1f22;
+    border: 1px solid rgba(255,255,255,0.1);
 }
 
 body.light-mode .login-redirect {
-    background: #ffffff;
-    border: 1px solid #ddd;
+    background: #fff;
+    border: 1px solid #e0e0e0;
 }
 
 .login-redirect a {
-    color: #3897f0;
+    color: #4c5fff;
     font-weight: bold;
     text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.login-redirect a:hover {
+    color: #5566ff;
+    text-decoration: underline;
 }
 
 
@@ -365,58 +485,118 @@ body.light-mode .cart-summary,
 body.light-mode .card.p-3 {
     background: #ffffff;
     color: #111;
-    border: 1px solid #2a2c2e;
-    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 
 /* DARK MODE */
 body:not(.light-mode) .cart-item,
 body:not(.light-mode) .card.p-3 {
-    background: #1f2225 ;
+    background: #1f2225;
     color: #ffffff;
-    border: 1px solid #2a2c2e;
-    border-radius: 10px;
+    border: 1px solid #333;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
 }
 
-/* CART SUMMARY – gjithmonë e bardhë (Autodoc style) */
+/* CART SUMMARY */
 .cart-summary {
     background: #ffffff !important;
     color: #111 !important;
-    border: 2px solid #2a2c2e;
-    border-radius: 10px;
+    border: 1px solid #e0e0e0;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+    padding: 20px;
 
     /* override Bootstrap vars */
     --bs-card-bg: #ffffff;
     --bs-card-color: #111;
 }
 
-
+body:not(.light-mode) .cart-summary {
+    background: #1c1f22 !important;
+    color: #fff !important;
+    border: 1px solid #333 !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.4);
+}
 
 .profile-photo {
     width: 150px;
     height: 150px;
     border-radius: 50%;
-    object-fit: cover;   /* Shfaq foton si duhet */
-    border: 3px solid #4d7fff; /* opsionale */
+    object-fit: cover;
+    border: 4px solid #4d7fff;
+    box-shadow: 0 8px 20px rgba(77, 127, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.profile-photo:hover {
+    transform: scale(1.05);
 }
 
 /* Light mode profile photo border */
 body.light-mode .profile-photo {
-    border: 3px solid #4d7fff !important;
+    border: 4px solid #4d7fff !important;
+    box-shadow: 0 4px 12px rgba(77, 127, 255, 0.2) !important;
 }
 
+
+@media (max-width: 576px) {
+  .cart-item {
+    flex-direction: column;
+    padding: 16px;
+  }
+  
+  .cart-item .text-end {
+    text-align: left !important;
+    margin-top: 12px;
+  }
+  
+  .login-card,
+  .register-card,
+  .register-box,
+  .login-redirect {
+    width: 100% !important;
+    max-width: none !important;
+    padding: 30px 20px;
+  }
+  
+  .profile-card {
+    padding: 24px 16px;
+  }
+  
+  .profile-photo {
+    width: 120px;
+    height: 120px;
+  }
+  
+  .insta-title {
+    font-size: 40px;
+  }
+  
+  .app-title {
+    font-size: 36px;
+  }
+}
 
 @media (max-width: 768px) {
   .product-card {
     margin: 0 auto;
     width: 90%;
   }
+  
   .btn {
-    font-size: 13px;
-    padding: 6px 10px;
+    font-size: 14px;
+    padding: 8px 12px;
   }
+  
   #cart-count {
     font-size: 11px;
+  }
+  
+  .register-container {
+    margin-top: 40px;
   }
 }
 
@@ -428,66 +608,72 @@ body.light-mode .profile-photo {
 .category-scroll {
   display: flex;
   overflow-x: auto;
-  gap: 1rem;
-  padding-bottom: 12px;
+  gap: 14px;
+  padding: 16px 0 12px 0;
   scrollbar-width: thin;
-  scrollbar-color: #ccc transparent;
+  scrollbar-color: #666 transparent;
 }
 
 .category-scroll::-webkit-scrollbar {
-  height: 8px;
+  height: 6px;
 }
+
 .category-scroll::-webkit-scrollbar-thumb {
-  background-color: #ccc;
-  border-radius: 4px;
+  background-color: #666;
+  border-radius: 3px;
 }
+
 .category-scroll::-webkit-scrollbar-thumb:hover {
   background-color: #999;
 }
 
-/* === Karta e kategorisë === */
+/* === Category Card === */
 .category-card {
-  border-radius: 14px;
-  border: 1px solid #eee;
+  flex-shrink: 0;
+  border-radius: 16px;
+  border: 1px solid #e5e5e5;
   background: #fff;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
   overflow: hidden;
+  min-width: 140px;
+  cursor: pointer;
 }
 
-/* Efekti hover */
+/* Hover Effect */
 .category-card:hover {
   transform: translateY(-6px);
   border-color: #ff6600;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 20px rgba(255, 102, 0, 0.15);
 }
 
-/* FOTO */
+/* PHOTO */
 .category-card img {
   width: 100%;
-  height: 150px;
+  height: 140px;
   object-fit: contain;
-  background: linear-gradient(to bottom, #f9f9f9, #fff);
-  border-bottom: 1px solid #eee;
+  background: linear-gradient(135deg, #f9f9f9, #fff);
+  border-bottom: 1px solid #e5e5e5;
   padding: 12px;
   transition: transform 0.3s ease;
 }
 
 .category-card:hover img {
-  transform: scale(1.06);
+  transform: scale(1.08);
 }
 
-/* TEKSTI */
+/* TEXT */
 .category-card .card-body {
   text-align: center;
-  padding-top: 10px;
+  padding: 12px 10px;
 }
 
 .category-card h6 {
   color: #222;
   font-weight: 600;
-  font-size: 15px;
-  margin-bottom: 8px;
+  font-size: 14px;
+  margin-bottom: 6px;
+  line-height: 1.4;
 }
 
 .category-card ul {
@@ -497,25 +683,24 @@ body.light-mode .profile-photo {
 }
 
 .category-card ul li {
-  font-size: 14px;
-  margin: 4px 0;
-  color: #555;
+  font-size: 12px;
+  margin: 3px 0;
+  color: #666;
 }
 
-/* Pikë ndarëse para nënkategorive */
 .category-card ul li::before {
   content: "•";
   color: #ff6600;
   font-weight: bold;
-  margin-right: 5px;
+  margin-right: 4px;
 }
 
-/* Linku më elegant */
 .category-card a {
-  color: #2563eb;
+  color: #4c5fff;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
+  font-size: 12px;
 }
 
 .category-card a:hover {
@@ -525,7 +710,11 @@ body.light-mode .profile-photo {
 
 @media (max-width: 768px) {
   .category-item {
-    width: 180px !important;
+    width: 160px !important;
+  }
+  
+  .category-card {
+    min-width: 120px;
   }
 }
 

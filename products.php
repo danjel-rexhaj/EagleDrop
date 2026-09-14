@@ -201,7 +201,7 @@ foreach ($categories as $cat):
 <?php if (!empty($products)): ?>
     <div class="row g-4">
         <?php foreach ($products as $p): ?>
-            <div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="col-6 col-lg-3 col-md-4">
 
                 <div class="card shadow-sm product-card h-100 p-2">
 
@@ -300,7 +300,7 @@ $fallback_products = $stmt_fb->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="row">
 <?php foreach ($fallback_products as $p): ?>
-  <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+  <div class="col-6 col-lg-3 col-md-4 mb-4">
 
     <div class="card shadow-sm h-100 product-card product-click p-2"
          data-href="product_details.php?id=<?= $p['id'] ?>">

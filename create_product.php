@@ -77,7 +77,7 @@ include "includes/header.php";
 
 <div class="container mt-4">
     <div class="row justify-content-center">
-        <div class="col-md-10">
+        <div class="col-12 col-md-10">
             <div class="card shadow">
                 <div class="card-header bg-primary text-white">
                     <h3 class="mb-0"><i class="fas fa-plus-circle"></i> Krijo nje produkt te ri</h3>
@@ -103,7 +103,7 @@ include "includes/header.php";
                         <hr class="my-4">
 
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <label class="form-label fw-bold text-primary">Kategoria *</label>
                                 <select class="form-select" name="category_id" id="category_id" required>
                                     <option value="">Zgjidh kategorine</option>
@@ -117,7 +117,7 @@ include "includes/header.php";
                         <hr class="my-4">
 
                         <div class="row">
-                            <div class="col-md-4 mb-3">
+                            <div class="col-6 col-md-4 mb-3">
                                 <label class="form-label fw-bold text-success">Prodhuesi i makines</label>
                                 <select class="form-select" name="fit_maker_text" id="fit_maker" required>
                                     <option value="">Zgjidh prodhues</option>
@@ -129,14 +129,14 @@ include "includes/header.php";
                                 </select>
                             </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-6 col-md-4 mb-3">
                                 <label class="form-label fw-bold text-success">Modeli i makines</label>
                                 <select class="form-select" name="fit_model_text" id="fit_model" required>
                                     <option value="">Zgjidh modelin</option>
                                 </select>
                             </div>
 
-                            <div class="col-md-4 mb-3">
+                            <div class="col-6 col-md-4 mb-3">
                                 <label class="form-label fw-bold text-success">Model ID</label>
                                 <input type="text" class="form-control" name="fit_model_id" id="fit_model_id" readonly>
                             </div>
@@ -145,11 +145,11 @@ include "includes/header.php";
                         <hr class="my-4">
 
                         <div class="row">
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <label class="form-label fw-bold">Brand</label>
                                 <input type="text" class="form-control" name="brand" placeholder="P.sh. Bosch, Mann, Febi">
                             </div>
-                            <div class="col-md-6 mb-3">
+                            <div class="col-12 col-md-6 mb-3">
                                 <label class="form-label fw-bold">Keywords</label>
                                 <input type="text" class="form-control" name="keywords" id="keywords" placeholder="Auto-gjenerohet">
                             </div>

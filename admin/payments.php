@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header("Location: /myplatform/access_denied.php");
+    header("Location: /access_denied.php");
     exit;
 }
 

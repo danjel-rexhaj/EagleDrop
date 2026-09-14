@@ -8,7 +8,7 @@ if (session_status() === PHP_SESSION_NONE) {
 <head>
     <meta charset="UTF-8">
     <title>Access Denied</title>
-    <link rel="stylesheet" href="/myplatform/assets/css/style.css">
+    <link rel="stylesheet" href="/assets/css/style.css">
     <style>
         body {
             background-color: #0f1113;
@@ -47,7 +47,7 @@ if (session_status() === PHP_SESSION_NONE) {
     <h1>⛔ Nuk keni akses</h1>
     <p>Kjo faqe eshte vetem per administratoret.</p>
 
-    <a href="/myplatform/index.php">← Kthehu ne faqe kryesore</a>
+    <a href="/index.php">← Kthehu ne faqe kryesore</a>
 </div>
 
 </body>

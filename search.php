@@ -48,7 +48,7 @@ function goBack() {
     <p class="text-muted">Asnje produkt nuk u gjet per kete kerkim.</p>
   <?php else: ?>
     <?php foreach ($products as $p): ?>
-      <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+      <div class="col-6 col-lg-3 col-md-4 mb-4">
         <div class="card shadow-sm h-100 product-card">
           <img src="assets/uploads/<?= htmlspecialchars($p['image']) ?>"
                class="card-img-top"
@@ -82,6 +82,16 @@ function goBack() {
   <?php endif; ?>
 </div>
 
+</div>
+<div class="position-fixed bottom-0 end-0 p-3" style="z-index: 11">
+  <div id="cartToast" class="toast align-items-center text-bg-success border-0" role="alert">
+    <div class="d-flex">
+      <div class="toast-body">
+        ✅ Produkti u shtua me sukses ne shporte!
+      </div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>
+  </div>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 

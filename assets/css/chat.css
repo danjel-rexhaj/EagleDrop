@@ -238,3 +238,211 @@
 .message.other .msg-time {
     color: #666;
 }
+
+
+.status-tag {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 1px 8px;
+    border-radius: 999px;
+    background: #e5e7eb;
+    color: #6b7280;
+    margin-left: 6px;
+    vertical-align: middle;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.chat-sub-header {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 16px;
+    border-bottom: 1px solid #eee;
+    background: #fafafa;
+}
+
+.assigned-tag {
+    font-size: 11px;
+    color: #93c5fd;
+    margin-top: 2px;
+}
+
+.assigned-tag strong {
+    color: #dbeafe;
+}
+
+.chat-sub-header .status-tag {
+    background: #fee2e2;
+    color: #b91c1c;
+    font-size: 12px;
+    padding: 3px 10px;
+}
+
+.close-conv-btn {
+    border: none;
+    background: #ef4444;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    padding: 6px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.close-conv-btn:hover {
+    background: #b91c1c;
+}
+
+
+/* ================= Floating support widget ================= */
+
+.chat-widget-bubble {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 58px;
+    height: 58px;
+    border-radius: 50%;
+    border: none;
+    background: #4f46e5;
+    color: #fff;
+    font-size: 24px;
+    box-shadow: 0 8px 24px rgba(0,0,0,.25);
+    cursor: pointer;
+    z-index: 9998;
+    transition: transform .15s ease;
+}
+
+.chat-widget-bubble:hover {
+    transform: scale(1.06);
+}
+
+.chat-widget-badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 5px;
+    border-radius: 999px;
+    background: #ef4444;
+    color: #fff;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+    box-shadow: 0 0 0 2px #1f2937;
+}
+
+.chat-widget-panel {
+    position: fixed;
+    right: 24px;
+    bottom: 24px;
+    width: 360px;
+    max-width: calc(100vw - 32px);
+    height: 520px;
+    max-height: calc(100vh - 48px);
+    background: #1f2937;
+    color: #f3f4f6;
+    border-radius: 16px;
+    box-shadow: 0 20px 50px rgba(0,0,0,.35);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    z-index: 9999;
+    font-family: system-ui, sans-serif;
+    animation: chatWidgetIn .18s ease;
+}
+
+@keyframes chatWidgetIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.chat-widget-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: #4f46e5;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.chat-widget-close {
+    border: none;
+    background: transparent;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+    opacity: .85;
+}
+
+.chat-widget-close:hover {
+    opacity: 1;
+}
+
+.chat-widget-status-banner {
+    padding: 8px 14px;
+    font-size: 12px;
+    text-align: center;
+    background: #7c2d12;
+    color: #fed7aa;
+}
+
+.chat-widget-messages {
+    flex: 1;
+    padding: 14px;
+    overflow-y: auto;
+    background: #111827;
+}
+
+.chat-widget-panel .chat-input {
+    background: #1f2937;
+    border-top: 1px solid #374151;
+}
+
+.chat-widget-panel .chat-input textarea {
+    background: #111827;
+    color: #f3f4f6;
+    border-color: #374151;
+}
+
+body.light-mode .chat-widget-panel {
+    background: #fff;
+    color: #111;
+}
+
+body.light-mode .chat-widget-messages {
+    background: #f5f7fb;
+}
+
+body.light-mode .chat-widget-panel .chat-input {
+    background: #fff;
+    border-top: 1px solid #eee;
+}
+
+body.light-mode .chat-widget-panel .chat-input textarea {
+    background: #fff;
+    color: #111;
+    border-color: #ddd;
+}
+
+@media (max-width: 480px) {
+    .chat-widget-panel {
+        right: 12px;
+        left: 12px;
+        width: auto;
+        bottom: 88px;
+    }
+    .chat-widget-bubble {
+        right: 16px;
+        bottom: 16px;
+    }
+}

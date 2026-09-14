@@ -1,6 +1,7 @@
 <?php
 require "./includes/auth.php";
 require "./config/database.php";
+require "./includes/support_conversation.php";
 
 $me = $_SESSION['user_id'];
 $role = $_SESSION['role'];
@@ -10,52 +11,18 @@ if ($role !== 'user') {
     exit;
 }
 
-
-$stmt = $conn->prepare("
-    SELECT id 
-    FROM users 
-    WHERE role IN ('staff','admin')
-    ORDER BY id ASC
-    LIMIT 1
-");
-$stmt->execute();
-$staff = $stmt->fetch(PDO::FETCH_ASSOC);
-
-if (!$staff) {
-    die('No staff available');
-}
-
-$defaultStaffId = $staff['id'];
-
-
-$stmt = $conn->prepare("
-    SELECT id 
-    FROM conversations 
-    WHERE client_id=? AND type='support'
-");
-$stmt->execute([$me]);
-$conv = $stmt->fetch();
-
-if (!$conv) {
-    $conn->prepare("
-        INSERT INTO conversations (client_id, staff_id, type)
-        VALUES (?, ?, 'support')
-    ")->execute([$me, $defaultStaffId]);
-
-    $conversation_id = $conn->lastInsertId();
-} else {
-    $conversation_id = $conv['id'];
-}
+$conversation_id = getOrCreateSupportConversation($conn, $me);
 
 
 
 $stmt = $conn->prepare("
-    SELECT 
+    SELECT
         m.id,
         m.message,
         m.sender_id,
         m.created_at,
-        u.username
+        u.username,
+        u.role
     FROM messages m
     JOIN users u ON u.id = m.sender_id
     WHERE m.conversation_id = ?
@@ -81,7 +48,7 @@ $conn->prepare("
 require "./includes/header.php";
 ?>
 
-<link rel="stylesheet" href="./assets/css/chat.css">
+<link rel="stylesheet" href="./assets/css/chat.css?v=<?= filemtime(__DIR__ . '/assets/css/chat.css') ?>">
 
 <div class="chat-container role-user">
     <div class="chat-header">💬 Support</div>
@@ -90,7 +57,7 @@ require "./includes/header.php";
         <?php foreach($messages as $m): ?>
             <div class="message <?= $m['sender_id']==$me?'me':'other' ?>" data-id="<?= $m['id'] ?>">
                 <div class="meta">
-                    <span class="name"><?= htmlspecialchars($m['username']) ?></span>
+                    <span class="name"><?= htmlspecialchars(supportDisplayName($m['username'], $m['role'])) ?></span>
                 </div>
                 <div class="bubble">
                     <?= nl2br(htmlspecialchars($m['message'])) ?>
@@ -110,6 +77,9 @@ require "./includes/header.php";
 const chatBox = document.getElementById('chatMessages');
 const textarea = document.querySelector('.chat-input textarea');
 
+function displayName(username, role) {
+    return (role === 'staff' || role === 'admin') ? `${username} · Support` : username;
+}
 
 if (!chatBox || !textarea) {
     console.log('No active chat – JS stopped');
@@ -143,13 +113,15 @@ if (!chatBox || !textarea) {
         })
         .then(r => r.json())
         .then(m => {
+            if (m.error) return;
+
             const div = document.createElement('div');
             div.className = 'message me';
             div.dataset.id = m.id;
 
             div.innerHTML = `
                 <div class="meta">
-                    <span class="name">${m.username}</span>
+                    <span class="name">${displayName(m.username, m.role)}</span>
                 </div>
                 <div class="bubble">
                     ${m.message.replace(/\n/g,'<br>')}
@@ -171,30 +143,32 @@ if (!chatBox || !textarea) {
         }
     });
 
-
     setInterval(() => {
-    fetch('check_unread_clients.php')
-        .then(r => r.json())
-        .then(data => {
+        fetch(`fetch_messages.php?conversation_id=<?= $conversation_id ?>&last_id=${lastMessageId}`)
+            .then(r => r.json())
+            .then(data => {
+                data.messages.forEach(m => {
+                    const div = document.createElement('div');
+                    div.className = 'message ' + (m.sender_id == <?= $me ?> ? 'me' : 'other');
+                    div.dataset.id = m.id;
 
-            document.querySelectorAll('.chat-item .badge').forEach(b => b.remove());
+                    div.innerHTML = `
+                        <div class="meta">
+                            <span class="name">${displayName(m.username, m.role)}</span>
+                        </div>
+                        <div class="bubble">
+                            ${m.message.replace(/\n/g,'<br>')}
+                            <div class="msg-time">${m.created_at.substr(11,5)}</div>
+                        </div>
+                    `;
 
-            data.forEach(c => {
-                if (c.unread > 0) {
-                    const chatLink = document.querySelector(`a[href="?c=${c.conversation_id}"]`);
-                    if (chatLink) {
-                        const nameDiv = chatLink.querySelector('.chat-name');
-                        if (nameDiv) {
-                            const badge = document.createElement('span');
-                            badge.className = 'badge bg-danger ms-1';
-                            badge.textContent = c.unread;
-                            nameDiv.appendChild(badge);
-                        }
-                    }
-                }
+                    chatBox.appendChild(div);
+                    lastMessageId = m.id;
+                });
+
+                if (data.messages.length) scrollBottom();
             });
-        });
-}, 3000);
+    }, 3000);
 
 }
 </script>

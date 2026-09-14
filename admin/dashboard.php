@@ -2,7 +2,7 @@
 session_start();
 
 if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
-    header("Location: /myplatform/access_denied.php");
+    header("Location: /access_denied.php");
     exit;
 }
 
@@ -36,7 +36,7 @@ $blockedUsers = $conn->query("
     <div class="row g-4">
 
 
-        <div class="col-md-4">
+        <div class="col-6 col-md-4">
             <div class="card shadow-sm border-0 bg-primary text-white">
                 <div class="card-body text-center">
                     <i class="fas fa-users fa-2x mb-2"></i>
@@ -47,7 +47,7 @@ $blockedUsers = $conn->query("
         </div>
 
 
-        <div class="col-md-4">
+        <div class="col-6 col-md-4">
             <div class="card shadow-sm border-0 bg-success text-white">
                 <div class="card-body text-center">
                     <i class="fas fa-user-check fa-2x mb-2"></i>
@@ -58,7 +58,7 @@ $blockedUsers = $conn->query("
         </div>
 
 
-        <div class="col-md-4">
+        <div class="col-6 col-md-4">
             <div class="card shadow-sm border-0 bg-danger text-white">
                 <div class="card-body text-center">
                     <i class="fas fa-user-lock fa-2x mb-2"></i>

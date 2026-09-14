@@ -18,7 +18,7 @@ $categories = $stmt->fetchAll(PDO::FETCH_ASSOC);
         $stmt->execute([$cat['id']]);
         $subs = $stmt->fetchAll(PDO::FETCH_ASSOC);
       ?>
-      <div class="col-lg-3 col-md-4 col-sm-6 mb-4">
+      <div class="col-6 col-lg-3 col-md-4 mb-4">
         <div class="card h-100 shadow-sm text-center category-card">
           <?php if ($cat['image']): ?>
             <img src="assets/uploads/<?= htmlspecialchars($cat['image']) ?>" class="card-img-top p-3" style="height:160px; object-fit:contain;">

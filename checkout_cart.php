@@ -2,6 +2,7 @@
 session_start();
 require 'vendor/autoload.php';
 require 'config/database.php';
+require 'config/env.php';
 
 if (!isset($_SESSION['user_id'])) {
     die("Duhet te jeni te loguar.");
@@ -10,7 +11,7 @@ if (!isset($_SESSION['user_id'])) {
 $user_id = $_SESSION['user_id'];
 
 
-//change it 
+\Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
 
 
 $stmt = $conn->prepare("
@@ -39,14 +40,14 @@ foreach ($items as $item) {
             'product_data' => [
                 'name' => $item['title'],
             ],
-            'unit_amount' => $item['price'] * 100 + 1000, 
+            'unit_amount' => $item['price'] * 100,
         ],
         'quantity' => $item['quantity'],
     ];
 }
 
 
-$BASE_URL = "https://stalagmitical-emma-unpoached.ngrok-free.dev/myplatform";
+$BASE_URL = env('APP_BASE_URL', 'https://stalagmitical-emma-unpoached.ngrok-free.dev/myplatform');
 $_SESSION['payment_type'] = 'cart';
 
 $session = \Stripe\Checkout\Session::create([
