@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="assets/css/style.css">
 <?php
 session_start();
 require 'config/database.php';
