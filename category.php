@@ -106,7 +106,7 @@ function goBack() {
     </h2>
 
     <?php if (!empty($availableBrands)): ?>
-    <form method="GET" class="brand-filter-bar d-flex align-items-center flex-wrap gap-2 mb-4">
+    <form method="GET" id="brandFilterBar" class="brand-filter-bar d-flex align-items-center flex-wrap gap-2 mb-4">
         <input type="hidden" name="category" value="<?= htmlspecialchars($category_id) ?>">
         <input type="hidden" name="include_sub" value="<?= htmlspecialchars($include_sub) ?>">
         <input type="hidden" name="maker" value="<?= htmlspecialchars($maker) ?>">
@@ -114,8 +114,9 @@ function goBack() {
         <input type="hidden" name="model_id" value="<?= htmlspecialchars($model_id) ?>">
         <input type="hidden" name="engine" value="<?= htmlspecialchars($engine) ?>">
 
+        <span class="brand-filter-icon">⚙️</span>
         <label for="brandSelect" class="fw-semibold small mb-0">Marka:</label>
-        <select id="brandSelect" name="brand" class="form-select form-select-sm w-auto" onchange="this.form.submit()">
+        <select id="brandSelect" name="brand" class="form-select form-select-sm w-auto" onchange="filterByBrand(this.value)">
             <option value="">Te gjitha markat</option>
             <?php foreach ($availableBrands as $b): ?>
                 <option value="<?= htmlspecialchars($b) ?>" <?= $brand === $b ? 'selected' : '' ?>><?= htmlspecialchars($b) ?></option>
@@ -124,11 +125,12 @@ function goBack() {
 
         <?php if ($brand !== ''): ?>
             <a href="?category=<?= urlencode($category_id) ?>&include_sub=<?= urlencode($include_sub) ?>&maker=<?= urlencode($maker) ?>&model=<?= urlencode($model) ?>&model_id=<?= urlencode($model_id) ?>&engine=<?= urlencode($engine) ?>"
-               class="small ms-1">Fshij filtrin</a>
+               class="clear-filter-btn ms-1" onclick="event.preventDefault(); loadCategory(this.href);">✕ Fshij filtrin</a>
         <?php endif; ?>
     </form>
     <?php endif; ?>
 
+<div id="productsList">
 <?php if (!empty($products)): ?>
 <div class="category-list">
 
@@ -186,6 +188,7 @@ function goBack() {
     <h4>🚫 Nuk u gjeten produkte per kete kategori per kete makine.</h4>
   </div>
 <?php endif; ?>
+</div>
 
 <style>
 
@@ -337,13 +340,58 @@ body:not(.light-mode) .btn-outline-primary:hover {
 }
 
 
-.brand-filter-bar a {
-  color: #dc3545;
-  text-decoration: none;
+.brand-filter-bar {
+  background: #ffffff;
+  border: 1px solid rgba(0,0,0,0.08);
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
 }
 
-.brand-filter-bar a:hover {
-  text-decoration: underline;
+.brand-filter-icon {
+  font-size: 15px;
+}
+
+.brand-filter-bar label {
+  color: #495057;
+}
+
+.brand-filter-bar select {
+  border-radius: 8px;
+  min-width: 180px;
+  border-color: rgba(0,0,0,0.15);
+}
+
+.brand-filter-bar select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 3px rgba(13,110,253,0.15);
+}
+
+.clear-filter-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 5px 12px;
+  border-radius: 20px;
+  background: rgba(220,53,69,0.1);
+  color: #dc3545 !important;
+  font-size: 13px;
+  font-weight: 600;
+  text-decoration: none !important;
+  transition: background-color .2s;
+}
+
+.clear-filter-btn:hover {
+  background: rgba(220,53,69,0.2);
+}
+
+#productsList {
+  transition: opacity .15s ease-in-out;
+}
+
+body:not(.light-mode) .brand-filter-bar {
+  background: linear-gradient(145deg, #1f2225, #1b1e21);
+  border-color: rgba(90,160,255,0.25);
 }
 
 body:not(.light-mode) .brand-filter-bar label {
@@ -351,13 +399,18 @@ body:not(.light-mode) .brand-filter-bar label {
 }
 
 body:not(.light-mode) .brand-filter-bar select {
-  background-color: #1f2225;
+  background-color: #16181b;
   color: #e4e6eb;
   border-color: rgba(90,160,255,0.35);
 }
 
-body:not(.light-mode) .brand-filter-bar a {
-  color: #ff8a8a;
+body:not(.light-mode) .clear-filter-btn {
+  background: rgba(255,138,138,0.15);
+  color: #ff8a8a !important;
+}
+
+body:not(.light-mode) .clear-filter-btn:hover {
+  background: rgba(255,138,138,0.25);
 }
 
 
@@ -431,6 +484,49 @@ function showCartToast(message) {
 function goToProduct(id) {
   window.location.href = "product_details.php?id=" + id;
 }
+
+async function loadCategory(url, pushState = true) {
+  const list = document.getElementById('productsList');
+  if (list) list.style.opacity = '0.4';
+
+  try {
+    const res = await fetch(url, { headers: { 'X-Requested-With': 'fetch' } });
+    const html = await res.text();
+    const doc = new DOMParser().parseFromString(html, 'text/html');
+
+    const newList = doc.getElementById('productsList');
+    const currentList = document.getElementById('productsList');
+    if (newList && currentList) {
+      currentList.replaceWith(newList);
+    }
+
+    const newFilterBar = doc.getElementById('brandFilterBar');
+    const currentFilterBar = document.getElementById('brandFilterBar');
+    if (newFilterBar && currentFilterBar) {
+      currentFilterBar.replaceWith(newFilterBar);
+    }
+
+    if (pushState) {
+      history.pushState({}, '', url);
+    }
+  } catch (e) {
+    window.location.href = url;
+  }
+}
+
+function filterByBrand(brand) {
+  const url = new URL(window.location.href);
+  if (brand) {
+    url.searchParams.set('brand', brand);
+  } else {
+    url.searchParams.delete('brand');
+  }
+  loadCategory(url.toString());
+}
+
+window.addEventListener('popstate', function () {
+  loadCategory(window.location.href, false);
+});
 
 </script>
 

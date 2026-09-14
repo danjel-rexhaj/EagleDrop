@@ -1,4 +1,3 @@
-<link rel="stylesheet" href="assets/css/style.css">
 <?php
 include 'includes/header.php';
 require 'config/database.php';
@@ -57,8 +56,6 @@ $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </button>
 </div>
 
-<link rel="stylesheet" href="assets/css/style.css">
-
 <script>
 function goBack() {
     if (document.referrer) {
@@ -70,6 +67,8 @@ function goBack() {
 </script>
 
 
+
+<div class="container">
 
 <!-- ============================= -->
 <!--     KATEGORITË E PJESËVE     -->
@@ -347,6 +346,7 @@ $fallback_products = $stmt_fb->fetchAll(PDO::FETCH_ASSOC);
 <?php endforeach; ?>
 </div>
 
+</div>
 
 <script>
 
