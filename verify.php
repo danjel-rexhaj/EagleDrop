@@ -30,9 +30,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $update = $conn->prepare("UPDATE users SET verification_code = ? WHERE email = ?");
             $update->execute([$newCode, $email]);
 
-            sendVerificationEmail($email, $newCode);
-            $_SESSION['verify_last_sent'] = time();
-            $info = "Nje kod i ri u dergua ne " . htmlspecialchars($email) . ".";
+            if (sendVerificationEmail($email, $newCode)) {
+                $_SESSION['verify_last_sent'] = time();
+                $info = "Nje kod i ri u dergua ne " . htmlspecialchars($email) . ".";
+            } else {
+                $message = "Dergimi i email-it deshtoi. Provo perseri me vone ose kontakto suportin.";
+            }
         }
 
     } elseif ($action === 'change_email') {
@@ -55,9 +58,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $email = $newEmail;
                 $_SESSION['pending_email'] = $newEmail;
 
-                sendVerificationEmail($newEmail, $newCode);
-                $_SESSION['verify_last_sent'] = time();
-                $info = "Email-i u ndryshua. Kodi i ri u dergua ne " . htmlspecialchars($newEmail) . ".";
+                if (sendVerificationEmail($newEmail, $newCode)) {
+                    $_SESSION['verify_last_sent'] = time();
+                    $info = "Email-i u ndryshua. Kodi i ri u dergua ne " . htmlspecialchars($newEmail) . ".";
+                } else {
+                    $message = "Email-i u ndryshua, por dergimi i kodit deshtoi. Provo 'Ridergo kodin'.";
+                }
             }
         }
 
