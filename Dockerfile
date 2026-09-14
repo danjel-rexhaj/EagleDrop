@@ -6,6 +6,8 @@ RUN apt-get update \
     && docker-php-ext-install pdo pdo_mysql \
     && a2enmod rewrite
 
+COPY docker/custom.ini /usr/local/etc/php/conf.d/custom.ini
+
 COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
 
 WORKDIR /var/www/html
