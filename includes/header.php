@@ -20,6 +20,7 @@ if (isset($_SESSION['user_id'])) {
 
 
 $notifCount = 0;
+$navProfileImage = null;
 
 if (isset($_SESSION['user_id'])) {
     $stmt = $conn->prepare("
@@ -30,6 +31,16 @@ if (isset($_SESSION['user_id'])) {
     ");
     $stmt->execute([$_SESSION['user_id']]);
     $notifCount = (int)$stmt->fetchColumn();
+
+    $stmt = $conn->prepare("SELECT profile_image FROM users WHERE id = ?");
+    $stmt->execute([$_SESSION['user_id']]);
+    $navProfileImage = $stmt->fetchColumn() ?: null;
+
+    // 'default.png' is just the column's DB default value, not a file that
+    // actually exists on disk -- treat it as "no photo uploaded yet".
+    if ($navProfileImage === 'default.png' || $navProfileImage === 'default_user.png') {
+        $navProfileImage = null;
+    }
 }
 
 
@@ -136,7 +147,11 @@ if (isset($_SESSION['user_id'])) {
 
 
             <a href="/profile.php" class="nav-icon">
-                <i class="bi bi-person-circle"></i>
+                <?php if ($navProfileImage): ?>
+                    <img src="/assets/uploads/<?= htmlspecialchars($navProfileImage) ?>" class="nav-avatar-img" alt="Profili">
+                <?php else: ?>
+                    <i class="bi bi-person-circle"></i>
+                <?php endif; ?>
             </a>
 
         

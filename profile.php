@@ -144,24 +144,28 @@ include "./includes/header.php";
         <?php endif; ?>
 
         <?php
-        $photoFile = !empty($currentUser['profile_image'])
-            ? $currentUser['profile_image']
-            : 'default_user.png';
-
-        $photo = "/assets/uploads/" . $photoFile;
+        $photoFile = $currentUser['profile_image'] ?? null;
+        if ($photoFile === '' || $photoFile === 'default.png' || $photoFile === 'default_user.png') {
+            $photoFile = null;
+        }
+        $photo = $photoFile ? "/assets/uploads/" . $photoFile : null;
         ?>
 
         <div class="profile-photo-header">
-            <img src="<?= htmlspecialchars($photo) ?>" class="profile-photo mb-3">
+            <?php if ($photo): ?>
+                <img src="<?= htmlspecialchars($photo) ?>" class="profile-photo mb-3">
+            <?php else: ?>
+                <div class="profile-photo profile-photo-placeholder mb-3">
+                    <i class="bi bi-person-fill"></i>
+                </div>
+            <?php endif; ?>
 
-            <form method="POST" enctype="multipart/form-data" class="profile-photo-form">
-                <label class="profile-file-btn">
-                    📷 Zgjidh nje foto
-                    <input type="file" name="photo" accept=".jpg,.jpeg,.png">
+            <form method="POST" enctype="multipart/form-data" class="profile-photo-form" id="photoForm">
+                <input type="hidden" name="upload_photo" value="1">
+                <label class="btn btn-primary profile-upload-btn">
+                    📷 Ngarko Foto
+                    <input type="file" name="photo" accept=".jpg,.jpeg,.png" id="photoInput" hidden>
                 </label>
-                <button name="upload_photo" class="btn btn-primary">
-                    Ngarko Foto
-                </button>
             </form>
         </div>
 
@@ -275,6 +279,12 @@ function toggleProfileSection(headerBtn) {
         item.classList.add('open');
     }
 }
+
+document.getElementById('photoInput').addEventListener('change', function () {
+    if (this.files.length) {
+        document.getElementById('photoForm').submit();
+    }
+});
 </script>
 
 <?php include "./includes/footer.php"; ?>

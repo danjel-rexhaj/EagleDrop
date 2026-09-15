@@ -40,6 +40,19 @@ try {
     $cartCount = 0;
 }
 
+$navProfileImage = null;
+try {
+    $qPhoto = $conn->prepare("SELECT profile_image FROM users WHERE id = ?");
+    $qPhoto->execute([$user_id]);
+    $navProfileImage = $qPhoto->fetchColumn() ?: null;
+
+    if ($navProfileImage === 'default.png' || $navProfileImage === 'default_user.png') {
+        $navProfileImage = null;
+    }
+} catch (PDOException $e) {
+    $navProfileImage = null;
+}
+
 
 
 
@@ -125,7 +138,11 @@ try {
 
 
             <a href="/profile.php" class="nav-icon">
-                <i class="bi bi-person-circle"></i>
+                <?php if ($navProfileImage): ?>
+                    <img src="/assets/uploads/<?= htmlspecialchars($navProfileImage) ?>" class="nav-avatar-img" alt="Profili">
+                <?php else: ?>
+                    <i class="bi bi-person-circle"></i>
+                <?php endif; ?>
             </a>
 
           

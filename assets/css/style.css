@@ -192,6 +192,22 @@ body.light-mode .nav-icon {
     transform: scale(1.1);
 }
 
+.nav-avatar-img {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 2px solid rgba(255,255,255,0.5);
+}
+
+body.light-mode .nav-avatar-img {
+    border-color: rgba(0,0,0,0.15);
+}
+
+.nav-icon:hover .nav-avatar-img {
+    border-color: #4c5fff;
+}
+
 body.light-mode .nav-search input {
     background: #f5f5f5 !important;
     border: 1px solid #d0d0d0 !important;
@@ -439,48 +455,22 @@ body.light-mode .profile-accordion-header {
     width: 100%;
 }
 
-.profile-file-btn {
-    position: relative;
+.profile-upload-btn {
+    cursor: pointer;
+}
+
+.profile-photo-placeholder {
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
-    width: 100%;
-    padding: 11px 16px;
-    border-radius: 8px;
-    border: 1px dashed rgba(255,255,255,0.25);
-    background: rgba(255,255,255,0.03);
-    color: #cfd3da;
-    font-size: 14px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
+    background: rgba(255,255,255,0.06);
+    font-size: 64px;
+    color: #6b7280;
 }
 
-.profile-file-btn:hover {
-    border-color: #5566ff;
-    color: #fff;
-    background: rgba(76, 95, 255, 0.1);
-}
-
-body.light-mode .profile-file-btn {
-    border: 1px dashed #c9cdd3;
-    background: #f9f9f9;
-    color: #444;
-}
-
-body.light-mode .profile-file-btn:hover {
-    border-color: #5566ff;
-    background: rgba(76, 95, 255, 0.06);
-    color: #222;
-}
-
-.profile-file-btn input[type="file"] {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    opacity: 0;
-    overflow: hidden;
+body.light-mode .profile-photo-placeholder {
+    background: #eef0f3;
+    color: #9aa0a6;
 }
 
 /* Logout Button */
