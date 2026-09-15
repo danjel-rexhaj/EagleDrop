@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/env.php';
 
-define("CRM_WEBHOOK_URL", env('CRM_WEBHOOK_URL', 'http://127.0.0.1:8000/leads/api/webhook/myplatform/registration/'));
+define("CRM_WEBHOOK_URL", env('CRM_WEBHOOK_URL', 'https://crm-project-3kd1.onrender.com/leads/api/webhook/myplatform/registration/'));
 define("CRM_WEBHOOK_SECRET", env('CRM_WEBHOOK_SECRET', ''));
 
 function sendLeadToCRM($first, $last, $email, $phone) {
@@ -22,8 +22,8 @@ function sendLeadToCRM($first, $last, $email, $phone) {
         "X-Webhook-Secret: " . CRM_WEBHOOK_SECRET,
     ]);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 2);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 3);
+    curl_setopt($ch, CURLOPT_CONNECTTIMEOUT, 5);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 8);
 
     $response = curl_exec($ch);
     $httpCode = curl_getinfo($ch, CURLINFO_HTTP_CODE);
