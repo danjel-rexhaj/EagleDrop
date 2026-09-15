@@ -293,10 +293,36 @@ document.addEventListener("DOMContentLoaded", () => {
       const modelName = model.options[model.selectedIndex].text;
       const engineName = engine.options[engine.selectedIndex].text;
 
+      document.getElementById('searchLoadingOverlay').classList.add('show');
+
       window.location.href = `products.php?maker_id=${makerId}&model_id=${modelId}&engine_id=${engineId}&maker=${encodeURIComponent(makerName)}&model=${encodeURIComponent(modelName)}&engine=${encodeURIComponent(engineName)}`;
     }
   });
 });
 </script>
+
+<div id="searchLoadingOverlay" class="search-loading-overlay">
+    <div class="spinner-border text-light" role="status"></div>
+    <p class="mt-3 text-light fw-semibold">Duke gjetur pjeset...</p>
+</div>
+
+<style>
+.search-loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(15, 17, 20, 0.85);
+}
+
+.search-loading-overlay.show {
+    display: flex;
+}
+</style>
+
+<?php include 'includes/footer.php'; ?>
 
 <?php include 'includes/footer.php'; ?>

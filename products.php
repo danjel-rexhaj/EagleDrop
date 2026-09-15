@@ -43,12 +43,40 @@ if ($engine !== '') {
     $params[] = "%$cleanEngine%";
 }
 
-$query .= " ORDER BY created_at DESC";
+$PRODUCTS_PAGE_SIZE = 12;
+
+$query .= " ORDER BY created_at DESC LIMIT $PRODUCTS_PAGE_SIZE";
 
 $stmt = $conn->prepare($query);
 $stmt->execute($params);
 $products = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
+<div id="pageLoadingOverlay" class="page-loading-overlay">
+    <div class="spinner-border text-primary" role="status"></div>
+</div>
+
+<style>
+.page-loading-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f8f9fa;
+    transition: opacity 0.3s ease;
+}
+
+body:not(.light-mode) .page-loading-overlay {
+    background: #16181b;
+}
+
+.page-loading-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+</style>
+
 <div class="container mt-3">
     <button class="back-btn" onclick="goBack()">
         <span class="arrow">←</span>
@@ -198,9 +226,16 @@ foreach ($categories as $cat):
     </div>
     
 <?php if (!empty($products)): ?>
-    <div class="row g-4">
+    <div class="row g-3"
+         id="productsGrid"
+         data-offset="<?= count($products) ?>"
+         data-maker="<?= htmlspecialchars($maker) ?>"
+         data-model="<?= htmlspecialchars($model) ?>"
+         data-engine="<?= htmlspecialchars($engine) ?>"
+         data-category="<?= (int) $category_id ?>"
+         data-has-more="<?= count($products) === $PRODUCTS_PAGE_SIZE ? '1' : '0' ?>">
         <?php foreach ($products as $p): ?>
-            <div class="col-6 col-lg-3 col-md-4">
+            <div class="col-6 col-md-4 col-lg-2">
 
                 <div class="card shadow-sm product-card h-100 p-2">
 
@@ -254,6 +289,10 @@ foreach ($categories as $cat):
 
             </div>
         <?php endforeach; ?>
+    </div>
+    <div id="productsLoadingMore" class="text-center py-4" hidden>
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="small text-muted mt-2 mb-0">Duke ngarkuar produkte te tjera...</p>
     </div>
 <?php endif; ?>
 
@@ -341,48 +380,7 @@ $fallback_products = $stmt_fb->fetchAll(PDO::FETCH_ASSOC);
 <?php endforeach; ?>
 </div>
 
-<div class="row g-3 text-center trust-badges-inline">
-    <div class="col-6 col-md-3">
-        <div class="trust-badge-sm">🔒 <span>Pagesa te sigurta</span></div>
-    </div>
-    <div class="col-6 col-md-3">
-        <div class="trust-badge-sm">🚚 <span>Dergese e shpejte</span></div>
-    </div>
-    <div class="col-6 col-md-3">
-        <div class="trust-badge-sm">↩️ <span>Kthim i lehte</span></div>
-    </div>
-    <div class="col-6 col-md-3">
-        <div class="trust-badge-sm">✅ <span>Pjese te verifikuara</span></div>
-    </div>
 </div>
-
-</div>
-
-<style>
-.trust-badges-inline {
-    margin: 30px 0 10px;
-}
-
-.trust-badge-sm {
-    background: #fff;
-    border-radius: 12px;
-    padding: 14px 10px;
-    font-size: 0.85rem;
-    font-weight: 600;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    height: 100%;
-}
-
-body:not(.light-mode) .trust-badge-sm {
-    background: #1f2225;
-    color: #e4e6eb;
-    border: 1px solid rgba(90,160,255,0.2);
-}
-</style>
 
 <script>
 
@@ -439,13 +437,136 @@ document.addEventListener("DOMContentLoaded", function () {
 
 function scrollCategories(direction) {
   const container = document.querySelector('.category-scroll');
-  const scrollAmount = 320; 
+  const scrollAmount = 320;
 
   container.scrollBy({
     left: direction * scrollAmount,
     behavior: 'smooth'
   });
 }
+
+
+// ============================
+// Infinite scroll for the main products grid
+// ============================
+(function () {
+  const grid = document.getElementById('productsGrid');
+  const loadingEl = document.getElementById('productsLoadingMore');
+  if (!grid) return;
+
+  let loading = false;
+  let hasMore = grid.dataset.hasMore === '1';
+  let offset = parseInt(grid.dataset.offset, 10) || 0;
+
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str ?? '';
+    return div.innerHTML;
+  }
+
+  function buildCard(p) {
+    const id = parseInt(p.id, 10);
+    const price = parseFloat(p.price).toFixed(2);
+    const col = document.createElement('div');
+    col.className = 'col-6 col-md-4 col-lg-2';
+    col.innerHTML = `
+      <div class="card shadow-sm product-card h-100 p-2">
+        <div class="product-img-wrap" onclick="window.location='product_details.php?id=${id}'">
+          <img src="assets/uploads/${escapeHtml(p.image)}" class="product-img" loading="lazy">
+        </div>
+        <div class="card-body d-flex flex-column">
+          <h6 class="fw-bold text-primary mb-1" style="cursor:pointer" onclick="window.location='product_details.php?id=${id}'">
+            ${escapeHtml(p.title)}
+          </h6>
+          <p class="small text-muted product-desc">${escapeHtml(p.description)}</p>
+          <h5 class="text-success fw-bold mb-3">€${price}</h5>
+          <div class="d-flex gap-2 mt-auto">
+            <button class="btn btn-success btn-sm w-50" onclick="addToCart(${id})">🛒 Add to Cart</button>
+            <form action="checkout_single.php" method="POST" class="w-50">
+              <input type="hidden" name="product_id" value="${id}">
+              <button class="btn btn-primary btn-sm w-100">⚡ Buy Now</button>
+            </form>
+          </div>
+        </div>
+      </div>
+    `;
+    return col;
+  }
+
+  async function loadMore() {
+    if (loading || !hasMore) return;
+    loading = true;
+    loadingEl.hidden = false;
+
+    const params = new URLSearchParams({
+      maker: grid.dataset.maker || '',
+      model: grid.dataset.model || '',
+      engine: grid.dataset.engine || '',
+      category: grid.dataset.category || '0',
+      offset: offset
+    });
+
+    try {
+      const res = await fetch(`ajax/load_more_products.php?${params.toString()}`);
+      const data = await res.json();
+
+      data.products.forEach(p => grid.appendChild(buildCard(p)));
+      offset += data.products.length;
+      hasMore = !!data.has_more;
+    } catch (e) {
+      console.error('load_more_products failed', e);
+      hasMore = false;
+    } finally {
+      loading = false;
+      loadingEl.hidden = true;
+    }
+  }
+
+  window.addEventListener('scroll', () => {
+    if (!hasMore || loading) return;
+    const nearBottom = window.innerHeight + window.scrollY >= document.body.offsetHeight - 600;
+    if (nearBottom) loadMore();
+  });
+})();
+
+
+// ============================
+// Loading overlay: wait for product images to finish loading before revealing
+// ============================
+(function () {
+  const overlay = document.getElementById('pageLoadingOverlay');
+  if (!overlay) return;
+
+  const images = Array.from(document.querySelectorAll('.product-img, .card-img-top'));
+
+  function reveal() {
+    overlay.classList.add('hidden');
+    setTimeout(() => overlay.remove(), 300);
+  }
+
+  if (images.length === 0) {
+    reveal();
+    return;
+  }
+
+  let remaining = images.length;
+  function done() {
+    remaining--;
+    if (remaining <= 0) reveal();
+  }
+
+  images.forEach(img => {
+    if (img.complete) {
+      done();
+    } else {
+      img.addEventListener('load', done, { once: true });
+      img.addEventListener('error', done, { once: true });
+    }
+  });
+
+  // Safety net so a slow/broken image never blocks the page forever.
+  setTimeout(reveal, 2500);
+})();
 </script>
 
 <style>
@@ -493,7 +614,7 @@ function scrollCategories(direction) {
 
 
 .product-img-wrap {
-  height: 240px;
+  height: 140px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -503,15 +624,33 @@ function scrollCategories(direction) {
 }
 
 .product-img {
-  max-height: 210px;
+  max-height: 120px;
   object-fit: contain;
 }
 
 
 .product-desc {
-  height: 42px;
+  height: 34px;
   overflow: hidden;
   text-overflow: ellipsis;
+  font-size: 0.78rem;
+}
+
+.product-card .card-body {
+  padding: 10px;
+}
+
+.product-card h6 {
+  font-size: 0.85rem;
+}
+
+.product-card h5 {
+  font-size: 0.95rem;
+}
+
+.product-card .btn-sm {
+  font-size: 0.72rem;
+  padding: 0.3rem 0.4rem;
 }
 
 
