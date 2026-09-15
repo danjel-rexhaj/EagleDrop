@@ -2,6 +2,7 @@
 require "./includes/auth.php";
 require "./config/database.php";
 require "./config/env.php";
+require "./config/mailer.php";
 require "./vendor/autoload.php";
 
 \Stripe\Stripe::setApiKey(env('STRIPE_SECRET_KEY'));
@@ -26,7 +27,9 @@ $sessionId = $_GET['session_id'];
 
 try {
 
-    $session = \Stripe\Checkout\Session::retrieve($sessionId);
+    $session = \Stripe\Checkout\Session::retrieve($sessionId, [
+        'expand' => ['line_items'],
+    ]);
 } catch (\Exception $e) {
     include "./includes/header.php"; ?>
     
@@ -80,6 +83,27 @@ if (!$exists) {
         $transactionId
     ]);
 
+    $paymentId = $conn->lastInsertId();
+
+    $purchasedItems = [];
+    $insertItem = $conn->prepare("
+        INSERT INTO payment_items (payment_id, product_title, quantity, unit_price)
+        VALUES (?, ?, ?, ?)
+    ");
+
+    foreach ($session->line_items->data as $lineItem) {
+        $qty = $lineItem->quantity ?: 1;
+        $unitPrice = $lineItem->price->unit_amount / 100;
+
+        $insertItem->execute([$paymentId, $lineItem->description, $qty, $unitPrice]);
+
+        $purchasedItems[] = [
+            'title' => $lineItem->description,
+            'quantity' => $qty,
+            'unit_price' => $unitPrice,
+        ];
+    }
+
     if (
         isset($_SESSION['payment_type']) &&
         $_SESSION['payment_type'] === 'cart'
@@ -92,7 +116,16 @@ if (!$exists) {
 
     unset($_SESSION['payment_type']);
 
+    $userStmt = $conn->prepare("SELECT email FROM users WHERE id = ?");
+    $userStmt->execute([$userId]);
+    $userEmail = $userStmt->fetchColumn();
+
+    if ($userEmail && $purchasedItems) {
+        if (!sendPaymentConfirmationEmail($userEmail, $purchasedItems, $amount, $transactionId)) {
+            error_log("payment_success.php: confirmation email failed for payment $paymentId");
+        }
     }
+}
 
 include "./includes/header.php";
 ?>

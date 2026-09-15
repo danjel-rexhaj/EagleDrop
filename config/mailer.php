@@ -118,3 +118,60 @@ function sendResetPasswordEmail($email, $token) {
 
     return sendViaSendGrid($email, "Reset Password - EagleDrop", $html);
 }
+
+function sendPaymentConfirmationEmail($email, array $items, $amount, $transactionId) {
+    $rows = '';
+    foreach ($items as $item) {
+        $lineTotal = number_format($item['unit_price'] * $item['quantity'], 2);
+        $rows .= "
+            <tr>
+                <td style='padding:8px 0; border-bottom:1px solid #eee'>"
+                    . htmlspecialchars($item['title']) . " &times; " . (int)$item['quantity'] .
+                "</td>
+                <td style='padding:8px 0; border-bottom:1px solid #eee; text-align:right'>&euro;{$lineTotal}</td>
+            </tr>
+        ";
+    }
+
+    $html = "
+    <div style='font-family: Arial, sans-serif; background:#f4f6f8; padding:30px'>
+        <div style='max-width:520px; margin:auto; background:#ffffff; border-radius:12px; overflow:hidden'>
+
+            <div style='background:#0d6efd; color:white; padding:20px; text-align:center'>
+                <h2 style='margin:0'>EagleDrop</h2>
+            </div>
+
+            <div style='padding:30px; color:#333'>
+                <h3 style='margin-top:0'>Pagesa u konfirmua</h3>
+
+                <p>
+                    Pershendetje,<br><br>
+                    Transferta juaj u krye me sukses dhe eshte drejtuar tek <b>EagleDrop</b>.
+                </p>
+
+                <table style='width:100%; border-collapse:collapse; margin:20px 0'>
+                    $rows
+                </table>
+
+                <p style='font-size:16px'><b>Shuma totale:</b> &euro;" . number_format($amount, 2) . "</p>
+                <p><b>Numri i references (transaksionit):</b> " . htmlspecialchars($transactionId) . "</p>
+
+                <p style='font-size:14px; color:#666; margin-top:20px'>
+                    Ruaj kete email si deshmi te pageses. Per pyetje, na kontaktoni permes Support-it ne platforme.
+                </p>
+
+                <p style='margin-top:30px'>
+                    Faleminderit qe zgjodhet EagleDrop!<br>
+                    <b>Ekipi EagleDrop</b>
+                </p>
+            </div>
+
+            <div style='background:#f1f1f1; padding:15px; text-align:center; font-size:12px; color:#777'>
+                © " . date('Y') . " EagleDrop. Te gjitha te drejtat e rezervuara.
+            </div>
+        </div>
+    </div>
+    ";
+
+    return sendViaSendGrid($email, "Konfirmim Pagese - EagleDrop", $html);
+}

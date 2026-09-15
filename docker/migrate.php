@@ -45,4 +45,18 @@ $conn->exec("
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
 ");
 
+// payment_items: the payments table only ever recorded the total amount and
+// a transaction id, never which products were actually bought - there was
+// no way to look that back up later (profile page, support, disputes).
+$conn->exec("
+    CREATE TABLE IF NOT EXISTS payment_items (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        payment_id INT NOT NULL,
+        product_title VARCHAR(255) NOT NULL,
+        quantity INT NOT NULL DEFAULT 1,
+        unit_price DECIMAL(10,2) NOT NULL,
+        KEY payment_id (payment_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+");
+
 echo "migrate: schema check complete\n";

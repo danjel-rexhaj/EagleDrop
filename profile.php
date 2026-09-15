@@ -133,6 +133,17 @@ $stmt = $conn->prepare("SELECT * FROM payments WHERE user_id = ? ORDER BY id DES
 $stmt->execute([$user_id]);
 $payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
+$paymentItemsByPayment = [];
+$paymentIds = array_column($payments, 'id');
+if ($paymentIds) {
+    $placeholders = implode(',', array_fill(0, count($paymentIds), '?'));
+    $stmt = $conn->prepare("SELECT * FROM payment_items WHERE payment_id IN ($placeholders) ORDER BY id ASC");
+    $stmt->execute($paymentIds);
+    foreach ($stmt->fetchAll(PDO::FETCH_ASSOC) as $item) {
+        $paymentItemsByPayment[$item['payment_id']][] = $item;
+    }
+}
+
 function paymentStatusClass($status) {
     $status = strtolower((string)$status);
     if (in_array($status, ['success', 'completed', 'paid'], true)) return 'success';
@@ -280,8 +291,9 @@ include "./includes/header.php";
                         <p class="profile-empty-hint">S'ke asnje pagese ende.</p>
                     <?php else: ?>
                         <div class="profile-payments-list">
-                            <?php foreach ($payments as $p): ?>
-                                <div class="profile-payment-row">
+                            <?php foreach ($payments as $p): $items = $paymentItemsByPayment[$p['id']] ?? []; ?>
+                                <div class="profile-payment-row <?= $items ? 'clickable' : '' ?>"
+                                     <?= $items ? 'onclick="togglePaymentItems(this)"' : '' ?>>
                                     <div class="profile-payment-main">
                                         <span class="profile-payment-amount">€<?= number_format($p['amount'], 2) ?></span>
                                         <span class="profile-payment-status status-<?= paymentStatusClass($p['status']) ?>">
@@ -292,6 +304,17 @@ include "./includes/header.php";
                                         <span><?= htmlspecialchars($p['provider'] ?? '-') ?></span>
                                         <span><?= htmlspecialchars($p['created_at'] ?? '') ?></span>
                                     </div>
+
+                                    <?php if ($items): ?>
+                                        <div class="profile-payment-items" hidden>
+                                            <?php foreach ($items as $it): ?>
+                                                <div class="profile-payment-item">
+                                                    <span><?= htmlspecialchars($it['product_title']) ?> &times; <?= (int)$it['quantity'] ?></span>
+                                                    <span>€<?= number_format($it['unit_price'] * $it['quantity'], 2) ?></span>
+                                                </div>
+                                            <?php endforeach; ?>
+                                        </div>
+                                    <?php endif; ?>
                                 </div>
                             <?php endforeach; ?>
                         </div>
@@ -318,6 +341,13 @@ function toggleProfileSection(headerBtn) {
         body.hidden = false;
         item.classList.add('open');
     }
+}
+
+function togglePaymentItems(row) {
+    const items = row.querySelector('.profile-payment-items');
+    if (!items) return;
+    items.hidden = !items.hidden;
+    row.classList.toggle('open', !items.hidden);
 }
 
 document.getElementById('photoInput').addEventListener('change', function () {

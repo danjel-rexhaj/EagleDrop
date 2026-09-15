@@ -497,6 +497,42 @@ body.light-mode .profile-payment-row {
     border: 1px solid #eceff1;
 }
 
+.profile-payment-row.clickable {
+    cursor: pointer;
+    transition: border-color 0.2s ease;
+}
+
+.profile-payment-row.clickable:hover,
+.profile-payment-row.clickable.open {
+    border-color: rgba(76, 95, 255, 0.4);
+}
+
+.profile-payment-items {
+    margin-top: 10px;
+    padding-top: 10px;
+    border-top: 1px dashed rgba(255,255,255,0.15);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+body.light-mode .profile-payment-items {
+    border-top: 1px dashed #dde1e6;
+}
+
+.profile-payment-item {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 13px;
+    color: #cfd3da;
+}
+
+body.light-mode .profile-payment-item {
+    color: #444;
+}
+
 .profile-payment-main {
     display: flex;
     align-items: center;
