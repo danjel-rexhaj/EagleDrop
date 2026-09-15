@@ -74,10 +74,16 @@
         bubble.classList.add('hidden');
 
         if (conversationId === null) {
+            messagesBox.innerHTML = '<div class="chat-widget-error">Duke ngarkuar…</div>';
+
             fetch('/widget_init.php')
-                .then(r => r.json())
-                .then(data => {
-                    if (data.error) return;
+                .then(r => r.json().then(data => ({ ok: r.ok, data })))
+                .then(({ ok, data }) => {
+                    if (!ok || data.error) {
+                        console.error('widget_init.php failed:', data && data.error);
+                        messagesBox.innerHTML = '<div class="chat-widget-error">Gabim gjatë ngarkimit të bisedës. Provo të rifreskosh faqen.</div>';
+                        return;
+                    }
                     conversationId = data.conversation_id;
                     me = data.me;
                     if (data.staff_name) {
@@ -88,6 +94,10 @@
                     setStatus(data.status);
                     scrollBottom();
                     startPolling();
+                })
+                .catch(err => {
+                    console.error('widget_init.php request failed:', err);
+                    messagesBox.innerHTML = '<div class="chat-widget-error">S\'u lidhëm dot me serverin. Kontrollo internetin dhe provo përsëri.</div>';
                 });
         } else {
             startPolling();
@@ -134,12 +144,20 @@
             headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
             body: `conversation_id=${conversationId}&message=${encodeURIComponent(msg)}`
         })
-        .then(r => r.json())
-        .then(m => {
-            if (m.error) return;
+        .then(r => r.json().then(data => ({ ok: r.ok, data })))
+        .then(({ ok, data: m }) => {
+            if (!ok || m.error) {
+                console.error('send_message.php failed:', m && m.error);
+                textarea.value = msg;
+                return;
+            }
             setStatus(m.status);
             renderMessage(m);
             scrollBottom();
+        })
+        .catch(err => {
+            console.error('send_message.php request failed:', err);
+            textarea.value = msg;
         });
     };
 

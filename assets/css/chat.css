@@ -427,6 +427,14 @@
     background: #111827;
 }
 
+.chat-widget-error {
+    margin: auto;
+    text-align: center;
+    font-size: 13px;
+    color: #9ca3af;
+    padding: 0 12px;
+}
+
 .chat-widget-panel .chat-input {
     background: #1f2937;
     border-top: 1px solid #374151;
