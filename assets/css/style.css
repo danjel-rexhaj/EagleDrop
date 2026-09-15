@@ -473,6 +473,78 @@ body.light-mode .profile-photo-placeholder {
     color: #9aa0a6;
 }
 
+.profile-empty-hint {
+    color: #8a8f98;
+    font-size: 14px;
+    margin: 4px 0;
+}
+
+.profile-payments-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-payment-row {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 10px;
+    padding: 12px 14px;
+}
+
+body.light-mode .profile-payment-row {
+    background: #fff;
+    border: 1px solid #eceff1;
+}
+
+.profile-payment-main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 4px;
+}
+
+.profile-payment-amount {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.profile-payment-meta {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
+    font-size: 12px;
+    color: #8a8f98;
+    text-transform: capitalize;
+}
+
+.profile-payment-status {
+    display: inline-block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .03em;
+    padding: 3px 10px;
+    border-radius: 999px;
+}
+
+.profile-payment-status.status-success {
+    background: rgba(34, 197, 94, 0.15);
+    color: #22c55e;
+}
+
+.profile-payment-status.status-danger {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+}
+
+.profile-payment-status.status-pending {
+    background: rgba(234, 179, 8, 0.15);
+    color: #eab308;
+}
+
 /* Logout Button */
 .logout-btn {
     background: #ff4d4d;

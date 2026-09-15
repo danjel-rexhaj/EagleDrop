@@ -129,6 +129,17 @@ $stmt = $conn->prepare("SELECT * FROM users WHERE id=?");
 $stmt->execute([$user_id]);
 $currentUser = $stmt->fetch(PDO::FETCH_ASSOC);
 
+$stmt = $conn->prepare("SELECT * FROM payments WHERE user_id = ? ORDER BY id DESC");
+$stmt->execute([$user_id]);
+$payments = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+function paymentStatusClass($status) {
+    $status = strtolower((string)$status);
+    if (in_array($status, ['success', 'completed', 'paid'], true)) return 'success';
+    if (in_array($status, ['failed', 'declined', 'canceled', 'cancelled'], true)) return 'danger';
+    return 'pending';
+}
+
 include "./includes/header.php";
 ?>
 
@@ -256,6 +267,35 @@ include "./includes/header.php";
                             Ndrysho Email
                         </button>
                     </form>
+                </div>
+            </div>
+
+            <div class="profile-accordion-item">
+                <button type="button" class="profile-accordion-header" onclick="toggleProfileSection(this)">
+                    <span>💳 Historiku i Pagesave</span>
+                    <span class="profile-accordion-arrow">▾</span>
+                </button>
+                <div class="profile-accordion-body" hidden>
+                    <?php if (empty($payments)): ?>
+                        <p class="profile-empty-hint">S'ke asnje pagese ende.</p>
+                    <?php else: ?>
+                        <div class="profile-payments-list">
+                            <?php foreach ($payments as $p): ?>
+                                <div class="profile-payment-row">
+                                    <div class="profile-payment-main">
+                                        <span class="profile-payment-amount">€<?= number_format($p['amount'], 2) ?></span>
+                                        <span class="profile-payment-status status-<?= paymentStatusClass($p['status']) ?>">
+                                            <?= htmlspecialchars($p['status'] ?? '-') ?>
+                                        </span>
+                                    </div>
+                                    <div class="profile-payment-meta">
+                                        <span><?= htmlspecialchars($p['provider'] ?? '-') ?></span>
+                                        <span><?= htmlspecialchars($p['created_at'] ?? '') ?></span>
+                                    </div>
+                                </div>
+                            <?php endforeach; ?>
+                        </div>
+                    <?php endif; ?>
                 </div>
             </div>
 
