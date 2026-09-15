@@ -256,6 +256,30 @@
     display: none !important;
 }
 
+.chat-suggestions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 20px 16px;
+    background: #f5f7fb;
+}
+
+.chat-suggestion-btn {
+    border: 1px solid #4f46e5;
+    background: #fff;
+    color: #4f46e5;
+    font-size: 13px;
+    padding: 8px 14px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background .15s ease, color .15s ease;
+}
+
+.chat-suggestion-btn:hover {
+    background: #4f46e5;
+    color: #fff;
+}
+
 .chat-sub-header {
     display: flex;
     justify-content: flex-end;

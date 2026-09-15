@@ -43,6 +43,22 @@ $conn->prepare("
     $conversation_id
 ]);
 
+// Only nudge with quick-reply suggestions before the client has said anything themselves.
+$hasClientMessage = false;
+foreach ($messages as $m) {
+    if ((int)$m['sender_id'] === (int)$me) {
+        $hasClientMessage = true;
+        break;
+    }
+}
+
+$suggestedQuestions = [
+    "Ku është porosia ime?",
+    "Si mund ta anuloj ose ndryshoj porosinë?",
+    "Kam problem me pagesën",
+    "Dua të bëj një kthim/rimbursim",
+];
+
 
 
 require "./includes/header.php";
@@ -67,6 +83,14 @@ require "./includes/header.php";
         <?php endforeach; ?>
     </div>
 
+    <?php if (!$hasClientMessage): ?>
+        <div class="chat-suggestions" id="chatSuggestions">
+            <?php foreach ($suggestedQuestions as $q): ?>
+                <button type="button" class="chat-suggestion-btn" onclick="sendSuggestion(this)"><?= htmlspecialchars($q) ?></button>
+            <?php endforeach; ?>
+        </div>
+    <?php endif; ?>
+
     <form class="chat-input" onsubmit="return false;">
         <textarea id="chatTextarea" placeholder="Write to support…" required></textarea>
         <button type="button" onclick="sendMessage()">➤</button>
@@ -75,7 +99,7 @@ require "./includes/header.php";
 
 <script>
 const chatBox = document.getElementById('chatMessages');
-const textarea = document.querySelector('.chat-input textarea');
+const textarea = document.getElementById('chatTextarea');
 
 function displayName(username, role) {
     return (role === 'staff' || role === 'admin') ? `${username} · Support` : username;
@@ -99,12 +123,23 @@ if (!chatBox || !textarea) {
     scrollBottom();
 
 
+    function hideSuggestions() {
+        const box = document.getElementById('chatSuggestions');
+        if (box) box.remove();
+    }
+
+    function sendSuggestion(btn) {
+        textarea.value = btn.textContent;
+        sendMessage();
+    }
+
     function sendMessage() {
         const msg = textarea.value.trim();
         if (!msg) return;
 
         textarea.value = '';
         textarea.focus();
+        hideSuggestions();
 
         fetch('send_message.php', {
             method: 'POST',

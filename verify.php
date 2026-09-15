@@ -12,6 +12,11 @@ $email = $_SESSION['pending_email'];
 $message = "";
 $info = "";
 
+if (!empty($_SESSION['verify_send_failed'])) {
+    $message = "Llogaria u krijua, por dergimi i email-it me kodin deshtoi. Kliko 'Ridergo kodin' per te provuar perseri.";
+    unset($_SESSION['verify_send_failed']);
+}
+
 $resendCooldown = 45;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

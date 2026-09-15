@@ -35,9 +35,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         sendLeadToCRM($first, $last, $email, $phone);
 
-        sendVerificationEmail($email, $code);
+        $emailSent = sendVerificationEmail($email, $code);
 
         $_SESSION['pending_email'] = $email;
+        if (!$emailSent) {
+            $_SESSION['verify_send_failed'] = true;
+        }
         header("Location: verify.php");
         exit();
     }
