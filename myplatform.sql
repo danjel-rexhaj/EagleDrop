@@ -464,6 +464,8 @@ CREATE TABLE `conversations` (
   `client_id` int(11) DEFAULT NULL,
   `staff_id` int(11) NOT NULL,
   `type` enum('support','staff') DEFAULT 'support',
+  `status` enum('open','closed') NOT NULL DEFAULT 'open',
+  `closed_at` datetime DEFAULT NULL,
   `created_at` timestamp NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
