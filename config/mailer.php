@@ -96,8 +96,9 @@ function sendVerificationEmail($email, $code) {
     return sendViaSendGrid($email, "Verifikimi i Llogarise – EagleDrop", $html);
 }
 
-function sendResetPasswordEmail($email) {
-    $resetLink = env('APP_BASE_URL', 'https://stalagmitical-emma-unpoached.ngrok-free.dev/myplatform') . '/reset_password.php';
+function sendResetPasswordEmail($email, $token) {
+    $resetLink = env('APP_BASE_URL', 'https://stalagmitical-emma-unpoached.ngrok-free.dev/myplatform')
+        . '/reset_password.php?token=' . urlencode($token);
 
     $html = "
     <div style='font-family:Arial;background:#f4f6f8;padding:30px'>

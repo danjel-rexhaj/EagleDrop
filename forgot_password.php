@@ -10,13 +10,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
     $stmt->execute([$email]);
-    $user = $stmt->fetch();
+    $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
     if ($user) {
-        $_SESSION['reset_email'] = $email;
-        sendResetPasswordEmail($email);
+        // Invalidate any older outstanding tokens for this account before
+        // handing out a new one, so only the most recent link works.
+        $conn->prepare("DELETE FROM password_resets WHERE user_id = ?")->execute([$user['id']]);
+
+        $token = bin2hex(random_bytes(32));
+
+        $conn->prepare("
+            INSERT INTO password_resets (user_id, token, expires_at)
+            VALUES (?, ?, DATE_ADD(NOW(), INTERVAL 30 MINUTE))
+        ")->execute([$user['id'], $token]);
+
+        sendResetPasswordEmail($email, $token);
     }
 
+    // Same message regardless of whether the account exists, so this page
+    // can't be used to probe which emails are registered.
     $message = "📧 Nese email-i ekziston, do te merrni nje link per resetimin e password-it.";
 }
 ?>

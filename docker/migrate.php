@@ -29,4 +29,20 @@ if (!columnExists($conn, 'conversations', 'closed_at')) {
     echo "migrate: added conversations.closed_at\n";
 }
 
+// password_resets: forgot_password.php used to "verify" a reset purely by
+// putting the submitted email in the session, with no token check at all -
+// anyone who knew a victim's email could reset their password without ever
+// touching their inbox. Needs its own table to hand out a real one-time,
+// expiring token per request.
+$conn->exec("
+    CREATE TABLE IF NOT EXISTS password_resets (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        user_id INT NOT NULL,
+        token VARCHAR(255) NOT NULL,
+        expires_at DATETIME NOT NULL,
+        UNIQUE KEY token (token),
+        KEY user_id (user_id)
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci
+");
+
 echo "migrate: schema check complete\n";
