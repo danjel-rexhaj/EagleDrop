@@ -3,7 +3,10 @@
 require_once __DIR__ . '/env.php';
 
 define("CRM_WEBHOOK_URL", env('CRM_WEBHOOK_URL', 'https://crm-project-3kd1.onrender.com/leads/api/webhook/myplatform/registration/'));
-define("CRM_WEBHOOK_SECRET", env('CRM_WEBHOOK_SECRET', ''));
+// Render's env for this service has the var named WEBHOOK_SECRET (no CRM_
+// prefix) while local .env uses CRM_WEBHOOK_SECRET - accept either so this
+// doesn't depend on renaming anything in Render's dashboard.
+define("CRM_WEBHOOK_SECRET", env('CRM_WEBHOOK_SECRET', env('WEBHOOK_SECRET', '')));
 
 function sendLeadToCRM($first, $last, $email, $phone) {
 
