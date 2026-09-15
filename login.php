@@ -241,6 +241,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="email" name="email" class="form-control mb-3" placeholder="Email" required>
             <input type="password" name="password" class="form-control mb-3" placeholder="Password" required>
 
+            <div class="form-check mb-3">
+                <input type="checkbox" class="form-check-input" id="remember" name="remember" checked>
+                <label class="form-check-label" for="remember">Me mbaj te kyçur</label>
+            </div>
+
             <button class="btn btn-login mb-3">Log in</button>
         </form>
 
