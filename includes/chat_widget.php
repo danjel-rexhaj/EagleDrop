@@ -47,6 +47,11 @@
     }
 
     function renderMessage(m) {
+        // Sending and the background poll can both learn about the same new
+        // row (the poll may already be in flight when a send completes), so
+        // never append a message whose data-id is already on screen.
+        if (messagesBox.querySelector(`[data-id="${m.id}"]`)) return;
+
         const div = document.createElement('div');
         div.className = 'message ' + (m.sender_id == me ? 'me' : 'other');
         div.dataset.id = m.id;

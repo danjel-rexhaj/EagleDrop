@@ -122,6 +122,30 @@ if (!chatBox || !textarea) {
 
     scrollBottom();
 
+    // Sending a message and the background poll can both learn about the
+    // same new row (the poll may have already been in flight when the send
+    // completed), so guard every append against a data-id already on screen.
+    function appendMessage(m, isMine) {
+        if (chatBox.querySelector(`[data-id="${m.id}"]`)) return;
+
+        const div = document.createElement('div');
+        div.className = 'message ' + (isMine ? 'me' : 'other');
+        div.dataset.id = m.id;
+
+        div.innerHTML = `
+            <div class="meta">
+                <span class="name">${displayName(m.username, m.role)}</span>
+            </div>
+            <div class="bubble">
+                ${m.message.replace(/\n/g,'<br>')}
+                <div class="msg-time">${m.created_at.substr(11,5)}</div>
+            </div>
+        `;
+
+        chatBox.appendChild(div);
+        lastMessageId = Math.max(lastMessageId, m.id);
+    }
+
 
     function hideSuggestions() {
         const box = document.getElementById('chatSuggestions');
@@ -149,23 +173,7 @@ if (!chatBox || !textarea) {
         .then(r => r.json())
         .then(m => {
             if (m.error) return;
-
-            const div = document.createElement('div');
-            div.className = 'message me';
-            div.dataset.id = m.id;
-
-            div.innerHTML = `
-                <div class="meta">
-                    <span class="name">${displayName(m.username, m.role)}</span>
-                </div>
-                <div class="bubble">
-                    ${m.message.replace(/\n/g,'<br>')}
-                    <div class="msg-time">${m.created_at.substr(11,5)}</div>
-                </div>
-            `;
-
-            chatBox.appendChild(div);
-            lastMessageId = m.id;
+            appendMessage(m, true);
             scrollBottom();
         });
     }
@@ -183,22 +191,7 @@ if (!chatBox || !textarea) {
             .then(r => r.json())
             .then(data => {
                 data.messages.forEach(m => {
-                    const div = document.createElement('div');
-                    div.className = 'message ' + (m.sender_id == <?= $me ?> ? 'me' : 'other');
-                    div.dataset.id = m.id;
-
-                    div.innerHTML = `
-                        <div class="meta">
-                            <span class="name">${displayName(m.username, m.role)}</span>
-                        </div>
-                        <div class="bubble">
-                            ${m.message.replace(/\n/g,'<br>')}
-                            <div class="msg-time">${m.created_at.substr(11,5)}</div>
-                        </div>
-                    `;
-
-                    chatBox.appendChild(div);
-                    lastMessageId = m.id;
+                    appendMessage(m, m.sender_id == <?= $me ?>);
                 });
 
                 if (data.messages.length) scrollBottom();
