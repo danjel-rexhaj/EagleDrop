@@ -77,11 +77,19 @@
             messagesBox.innerHTML = '<div class="chat-widget-error">Duke ngarkuar…</div>';
 
             fetch('/widget_init.php')
-                .then(r => r.json().then(data => ({ ok: r.ok, data })))
-                .then(({ ok, data }) => {
+                .then(r => r.text().then(text => ({ status: r.status, ok: r.ok, text })))
+                .then(({ status, ok, text }) => {
+                    let data;
+                    try {
+                        data = JSON.parse(text);
+                    } catch (e) {
+                        console.error(`widget_init.php returned non-JSON (HTTP ${status}):`, text.slice(0, 1000));
+                        messagesBox.innerHTML = `<div class="chat-widget-error">Gabim serveri (HTTP ${status}) gjatë ngarkimit. Ekrani i konsolës (F12) ka detajet.</div>`;
+                        return;
+                    }
                     if (!ok || data.error) {
-                        console.error('widget_init.php failed:', data && data.error);
-                        messagesBox.innerHTML = '<div class="chat-widget-error">Gabim gjatë ngarkimit të bisedës. Provo të rifreskosh faqen.</div>';
+                        console.error('widget_init.php failed:', data.error);
+                        messagesBox.innerHTML = `<div class="chat-widget-error">${data.error || 'Gabim gjatë ngarkimit të bisedës.'}</div>`;
                         return;
                     }
                     conversationId = data.conversation_id;
@@ -134,7 +142,12 @@
 
     window.widgetSendMessage = function () {
         const msg = textarea.value.trim();
-        if (!msg || conversationId === null) return;
+        if (!msg) return;
+
+        if (conversationId === null) {
+            messagesBox.innerHTML = '<div class="chat-widget-error">Biseda s\'është ngarkuar ende. Mbyll dhe rihap panelin dhe provo sërish.</div>';
+            return;
+        }
 
         textarea.value = '';
         textarea.focus();
