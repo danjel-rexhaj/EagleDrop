@@ -154,73 +154,100 @@ include "./includes/header.php";
 
                 $photo = "/assets/uploads/" . $photoFile;
                 ?>
-                <img src="<?= htmlspecialchars($photo) ?>" class="profile-photo mb-3">
 
-                <form method="POST" enctype="multipart/form-data">
-                    <input type="file" name="photo" class="form-control mb-2">
-                    <button name="upload_photo" class="btn btn-primary w-100">
-                        Ngarko Foto
-                    </button>
-                </form>
+                <div class="profile-section profile-photo-section">
+                    <img src="<?= htmlspecialchars($photo) ?>" class="profile-photo mb-3">
+
+                    <form method="POST" enctype="multipart/form-data" class="profile-photo-form">
+                        <label class="profile-file-btn">
+                            📷 Zgjidh nje foto
+                            <input type="file" name="photo" accept=".jpg,.jpeg,.png">
+                        </label>
+                        <button name="upload_photo" class="btn btn-primary w-100">
+                            Ngarko Foto
+                        </button>
+                    </form>
+                </div>
             </div>
 
 
             <div class="col-12 col-md-6">
 
-                <form method="POST">
-                    <input name="username" class="form-control mb-2"
-                           value="<?= htmlspecialchars($currentUser['username']) ?>" required>
+                <div class="profile-section">
+                    <div class="profile-section-title">📝 Te dhenat personale</div>
 
-                    <input name="first_name" class="form-control mb-2"
-                           value="<?= htmlspecialchars($currentUser['first_name']) ?>" required>
+                    <form method="POST">
+                        <label class="profile-label">Username</label>
+                        <input name="username" class="form-control mb-3"
+                               value="<?= htmlspecialchars($currentUser['username']) ?>" required>
 
-                    <input name="last_name" class="form-control mb-2"
-                           value="<?= htmlspecialchars($currentUser['last_name']) ?>" required>
+                        <div class="row g-2 mb-3">
+                            <div class="col-6">
+                                <label class="profile-label">Emri</label>
+                                <input name="first_name" class="form-control"
+                                       value="<?= htmlspecialchars($currentUser['first_name']) ?>" required>
+                            </div>
+                            <div class="col-6">
+                                <label class="profile-label">Mbiemri</label>
+                                <input name="last_name" class="form-control"
+                                       value="<?= htmlspecialchars($currentUser['last_name']) ?>" required>
+                            </div>
+                        </div>
 
-                    <input name="phone" class="form-control mb-3"
-                           value="<?= htmlspecialchars($currentUser['phone']) ?>">
-                           <input type="email" class="form-control mb-3"
-                            value="<?= htmlspecialchars($currentUser['email']) ?>"
-                            readonly>
+                        <label class="profile-label">Telefoni</label>
+                        <input name="phone" class="form-control mb-3"
+                               value="<?= htmlspecialchars($currentUser['phone']) ?>">
 
+                        <label class="profile-label">Email <span class="profile-label-hint">(ndrysho me poshte)</span></label>
+                        <input type="email" class="form-control mb-3"
+                               value="<?= htmlspecialchars($currentUser['email']) ?>"
+                               readonly>
 
-                    <button name="update_info" class="btn btn-success w-100">
-                        Perditeso Profilin
-                    </button>
-                </form>
+                        <button name="update_info" class="btn btn-success w-100">
+                            Perditeso Profilin
+                        </button>
+                    </form>
+                </div>
 
-                <hr>
+                <div class="profile-section">
+                    <div class="profile-section-title">🔒 Ndrysho Password-in</div>
 
+                    <form method="POST">
+                        <label class="profile-label">Password aktual</label>
+                        <input type="password" name="current_password" class="form-control mb-3"
+                               placeholder="••••••••" required>
 
-                <form method="POST">
-                    <input type="password" name="current_password" class="form-control mb-2"
-                           placeholder="Password aktual" required>
+                        <label class="profile-label">Password i ri</label>
+                        <input type="password" name="new_password" class="form-control mb-3"
+                               placeholder="••••••••" required>
 
-                    <input type="password" name="new_password" class="form-control mb-2"
-                           placeholder="Password i ri" required>
+                        <label class="profile-label">Konfirmo password-in</label>
+                        <input type="password" name="confirm_password" class="form-control mb-3"
+                               placeholder="••••••••" required>
 
-                    <input type="password" name="confirm_password" class="form-control mb-3"
-                           placeholder="Konfirmo password" required>
+                        <button name="change_password" class="btn btn-warning w-100">
+                            Ndrysho Password
+                        </button>
+                    </form>
+                </div>
 
-                    <button name="change_password" class="btn btn-warning w-100">
-                        Ndrysho Password
-                    </button>
-                </form>
+                <div class="profile-section">
+                    <div class="profile-section-title">📧 Ndrysho Email-in</div>
 
-                <hr>
+                    <form method="POST">
+                        <label class="profile-label">Email i ri</label>
+                        <input type="email" name="new_email" class="form-control mb-3"
+                               placeholder="emri@shembull.com" required>
 
+                        <label class="profile-label">Password aktual</label>
+                        <input type="password" name="email_password" class="form-control mb-3"
+                               placeholder="••••••••" required>
 
-                <form method="POST">
-                    <input type="email" name="new_email" class="form-control mb-2"
-                           placeholder="Email i ri" required>
-
-                    <input type="password" name="email_password" class="form-control mb-3"
-                           placeholder="Password aktual" required>
-
-                    <button name="change_email" class="btn btn-info w-100">
-                        Ndrysho Email
-                    </button>
-                </form>
+                        <button name="change_email" class="btn btn-info w-100">
+                            Ndrysho Email
+                        </button>
+                    </form>
+                </div>
 
             </div>
         </div>

@@ -317,6 +317,130 @@ body.light-mode .profile-card input.form-control {
     box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
+.profile-card .btn-warning,
+.profile-card .btn-info {
+    padding: 11px 24px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    color: #fff;
+    transition: all 0.2s ease;
+}
+
+.profile-card .btn-warning:hover,
+.profile-card .btn-info:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+}
+
+.profile-section {
+    background: rgba(255,255,255,0.03);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 14px;
+    padding: 22px 24px;
+    margin-bottom: 18px;
+    text-align: left;
+}
+
+body.light-mode .profile-section {
+    background: #fafbfc;
+    border: 1px solid #eceff1;
+}
+
+.profile-section:last-child {
+    margin-bottom: 0;
+}
+
+.profile-photo-section {
+    text-align: center;
+}
+
+.profile-section-title {
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: .02em;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: #9aa4ff;
+}
+
+body.light-mode .profile-section-title {
+    color: #4c5fff;
+}
+
+.profile-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .05em;
+    color: #8a8f98;
+    margin-bottom: 6px;
+}
+
+.profile-label-hint {
+    text-transform: none;
+    font-weight: 400;
+    letter-spacing: normal;
+    opacity: .7;
+}
+
+.profile-card input.form-control[readonly] {
+    opacity: .6;
+    cursor: not-allowed;
+}
+
+.profile-photo-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.profile-file-btn {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 11px 16px;
+    border-radius: 8px;
+    border: 1px dashed rgba(255,255,255,0.25);
+    background: rgba(255,255,255,0.03);
+    color: #cfd3da;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.profile-file-btn:hover {
+    border-color: #5566ff;
+    color: #fff;
+    background: rgba(76, 95, 255, 0.1);
+}
+
+body.light-mode .profile-file-btn {
+    border: 1px dashed #c9cdd3;
+    background: #f9f9f9;
+    color: #444;
+}
+
+body.light-mode .profile-file-btn:hover {
+    border-color: #5566ff;
+    background: rgba(76, 95, 255, 0.06);
+    color: #222;
+}
+
+.profile-file-btn input[type="file"] {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    opacity: 0;
+    overflow: hidden;
+}
+
 /* Logout Button */
 .logout-btn {
     background: #ff4d4d;
