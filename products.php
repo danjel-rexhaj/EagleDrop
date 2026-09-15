@@ -280,11 +280,6 @@ if ($engine !== '') {
     $fallback_params[] = "%$engine%";
 }
 
-// Nese s’ka asnje filter (rast shume i rralle), mos e boshatis faqen
-if (empty($fallback_params)) {
-    $fallback_sql .= " LIMIT 12";
-}
-
 // Randomizo produktet
 $fallback_sql .= " ORDER BY RAND() LIMIT 12";
 
