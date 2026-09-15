@@ -12,6 +12,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $first = trim($_POST["first_name"]);
     $last = trim($_POST["last_name"]);
+    if (isset($_GET['debug_bytes'])) {
+        die(json_encode([
+            'raw_first_hex' => bin2hex($first),
+            'default_charset_ini' => ini_get('default_charset'),
+            'mbstring_http_input' => ini_get('mbstring.http_input'),
+            'mbstring_encoding_translation' => ini_get('mbstring.encoding_translation'),
+            'mbstring_internal_encoding' => ini_get('mbstring.internal_encoding'),
+            'mbstring_func_overload' => ini_get('mbstring.func_overload'),
+            'input_encoding' => ini_get('input_encoding'),
+            'content_type_header' => $_SERVER['CONTENT_TYPE'] ?? null,
+        ]));
+    }
     $username = trim($_POST["username"]);
     $phone = trim($_POST["phone"]);
     $email = trim($_POST["email"]);
