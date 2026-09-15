@@ -14,39 +14,45 @@ if ($role !== 'user') {
     exit;
 }
 
-$conversation_id = getOrCreateSupportConversation($conn, $me);
+try {
+    $conversation_id = getOrCreateSupportConversation($conn, $me);
 
-$stmt = $conn->prepare("SELECT status, staff_id FROM conversations WHERE id=?");
-$stmt->execute([$conversation_id]);
-$conv = $stmt->fetch(PDO::FETCH_ASSOC);
+    $stmt = $conn->prepare("SELECT status, staff_id FROM conversations WHERE id=?");
+    $stmt->execute([$conversation_id]);
+    $conv = $stmt->fetch(PDO::FETCH_ASSOC);
 
-$staffName = null;
-if ($conv['staff_id']) {
-    $stmt = $conn->prepare("SELECT username FROM users WHERE id=?");
-    $stmt->execute([$conv['staff_id']]);
-    $staffName = $stmt->fetchColumn() ?: null;
+    $staffName = null;
+    if ($conv['staff_id']) {
+        $stmt = $conn->prepare("SELECT username FROM users WHERE id=?");
+        $stmt->execute([$conv['staff_id']]);
+        $staffName = $stmt->fetchColumn() ?: null;
+    }
+
+    $stmt = $conn->prepare("
+        SELECT m.id, m.message, m.sender_id, m.created_at, u.username, u.role
+        FROM messages m
+        JOIN users u ON u.id = m.sender_id
+        WHERE m.conversation_id = ?
+        ORDER BY m.created_at ASC
+    ");
+    $stmt->execute([$conversation_id]);
+    $messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    $conn->prepare("
+        UPDATE notifications
+        SET is_read = 1
+        WHERE user_id = ? AND conversation_id = ? AND is_read = 0
+    ")->execute([$me, $conversation_id]);
+
+    echo json_encode([
+        'conversation_id' => $conversation_id,
+        'status' => $conv['status'],
+        'staff_name' => $staffName,
+        'messages' => $messages,
+        'me' => $me,
+    ]);
+} catch (Throwable $e) {
+    error_log("widget_init.php error: " . $e->getMessage());
+    http_response_code(500);
+    echo json_encode(['error' => $e->getMessage()]);
 }
-
-$stmt = $conn->prepare("
-    SELECT m.id, m.message, m.sender_id, m.created_at, u.username, u.role
-    FROM messages m
-    JOIN users u ON u.id = m.sender_id
-    WHERE m.conversation_id = ?
-    ORDER BY m.created_at ASC
-");
-$stmt->execute([$conversation_id]);
-$messages = $stmt->fetchAll(PDO::FETCH_ASSOC);
-
-$conn->prepare("
-    UPDATE notifications
-    SET is_read = 1
-    WHERE user_id = ? AND conversation_id = ? AND is_read = 0
-")->execute([$me, $conversation_id]);
-
-echo json_encode([
-    'conversation_id' => $conversation_id,
-    'status' => $conv['status'],
-    'staff_name' => $staffName,
-    'messages' => $messages,
-    'me' => $me,
-]);
