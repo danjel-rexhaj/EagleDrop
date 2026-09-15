@@ -115,6 +115,97 @@ body {
   </form>
 </div>
 
+<div class="container trust-badges-wrap">
+  <div class="row g-3 text-center">
+
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="trust-badge">
+        <div class="trust-icon">🔒</div>
+        <div class="trust-title">Pagesa te sigurta</div>
+        <div class="trust-sub">Mbrojtur nga Stripe</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="trust-badge">
+        <div class="trust-icon">💶</div>
+        <div class="trust-title">Pa kosto te fshehura</div>
+        <div class="trust-sub">Çmimi qe shikon, ate paguan</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="trust-badge">
+        <div class="trust-icon">🚚</div>
+        <div class="trust-title">Dergese e shpejte</div>
+        <div class="trust-sub">Ne te gjithe Shqiperine</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="trust-badge">
+        <div class="trust-icon">↩️</div>
+        <div class="trust-title">Kthim i lehte</div>
+        <div class="trust-sub">Kontakto Support-in</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="trust-badge">
+        <div class="trust-icon">✅</div>
+        <div class="trust-title">Pjese te verifikuara</div>
+        <div class="trust-sub">Cilesi e kontrolluar</div>
+      </div>
+    </div>
+
+    <div class="col-6 col-md-4 col-lg-2">
+      <div class="trust-badge">
+        <div class="trust-icon">💬</div>
+        <div class="trust-title">Support gjithmone aktiv</div>
+        <div class="trust-sub">Pergjigje brenda minutash</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<style>
+.trust-badges-wrap {
+  max-width: 1000px;
+  margin: 0 auto 6vh;
+}
+
+.trust-badge {
+  background: rgba(255,255,255,0.92);
+  border-radius: 14px;
+  padding: 18px 10px;
+  height: 100%;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+  transition: transform 0.2s ease;
+}
+
+.trust-badge:hover {
+  transform: translateY(-3px);
+}
+
+.trust-icon {
+  font-size: 1.8rem;
+  margin-bottom: 6px;
+}
+
+.trust-title {
+  font-weight: 700;
+  font-size: 0.85rem;
+  color: #212529;
+}
+
+.trust-sub {
+  font-size: 0.75rem;
+  color: #6c757d;
+  margin-top: 2px;
+}
+</style>
+
 <script>
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -207,3 +298,5 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 </script>
+
+<?php include 'includes/footer.php'; ?>

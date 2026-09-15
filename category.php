@@ -530,4 +530,6 @@ window.addEventListener('popstate', function () {
 
 </script>
 
+<?php include 'includes/footer.php'; ?>
+
 

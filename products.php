@@ -346,7 +346,48 @@ $fallback_products = $stmt_fb->fetchAll(PDO::FETCH_ASSOC);
 <?php endforeach; ?>
 </div>
 
+<div class="row g-3 text-center trust-badges-inline">
+    <div class="col-6 col-md-3">
+        <div class="trust-badge-sm">🔒 <span>Pagesa te sigurta</span></div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="trust-badge-sm">🚚 <span>Dergese e shpejte</span></div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="trust-badge-sm">↩️ <span>Kthim i lehte</span></div>
+    </div>
+    <div class="col-6 col-md-3">
+        <div class="trust-badge-sm">✅ <span>Pjese te verifikuara</span></div>
+    </div>
 </div>
+
+</div>
+
+<style>
+.trust-badges-inline {
+    margin: 30px 0 10px;
+}
+
+.trust-badge-sm {
+    background: #fff;
+    border-radius: 12px;
+    padding: 14px 10px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.06);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 100%;
+}
+
+body:not(.light-mode) .trust-badge-sm {
+    background: #1f2225;
+    color: #e4e6eb;
+    border: 1px solid rgba(90,160,255,0.2);
+}
+</style>
 
 <script>
 
@@ -584,3 +625,5 @@ body:not(.light-mode) .cat-arrow {
 }
 
 </style>
+
+<?php include 'includes/footer.php'; ?>
