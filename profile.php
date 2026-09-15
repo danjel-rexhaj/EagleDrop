@@ -143,39 +143,36 @@ include "./includes/header.php";
             </div>
         <?php endif; ?>
 
-        <div class="row justify-content-center">
+        <?php
+        $photoFile = !empty($currentUser['profile_image'])
+            ? $currentUser['profile_image']
+            : 'default_user.png';
 
+        $photo = "/assets/uploads/" . $photoFile;
+        ?>
 
-            <div class="col-12 col-md-4 text-center">
-                <?php
-                $photoFile = !empty($currentUser['profile_image'])
-                    ? $currentUser['profile_image']
-                    : 'default_user.png';
+        <div class="profile-photo-header">
+            <img src="<?= htmlspecialchars($photo) ?>" class="profile-photo mb-3">
 
-                $photo = "/assets/uploads/" . $photoFile;
-                ?>
+            <form method="POST" enctype="multipart/form-data" class="profile-photo-form">
+                <label class="profile-file-btn">
+                    📷 Zgjidh nje foto
+                    <input type="file" name="photo" accept=".jpg,.jpeg,.png">
+                </label>
+                <button name="upload_photo" class="btn btn-primary">
+                    Ngarko Foto
+                </button>
+            </form>
+        </div>
 
-                <div class="profile-section profile-photo-section">
-                    <img src="<?= htmlspecialchars($photo) ?>" class="profile-photo mb-3">
+        <div class="profile-accordion mx-auto">
 
-                    <form method="POST" enctype="multipart/form-data" class="profile-photo-form">
-                        <label class="profile-file-btn">
-                            📷 Zgjidh nje foto
-                            <input type="file" name="photo" accept=".jpg,.jpeg,.png">
-                        </label>
-                        <button name="upload_photo" class="btn btn-primary w-100">
-                            Ngarko Foto
-                        </button>
-                    </form>
-                </div>
-            </div>
-
-
-            <div class="col-12 col-md-6">
-
-                <div class="profile-section">
-                    <div class="profile-section-title">📝 Te dhenat personale</div>
-
+            <div class="profile-accordion-item">
+                <button type="button" class="profile-accordion-header" onclick="toggleProfileSection(this)">
+                    <span>📝 Te dhenat personale</span>
+                    <span class="profile-accordion-arrow">▾</span>
+                </button>
+                <div class="profile-accordion-body" hidden>
                     <form method="POST">
                         <label class="profile-label">Username</label>
                         <input name="username" class="form-control mb-3"
@@ -208,10 +205,14 @@ include "./includes/header.php";
                         </button>
                     </form>
                 </div>
+            </div>
 
-                <div class="profile-section">
-                    <div class="profile-section-title">🔒 Ndrysho Password-in</div>
-
+            <div class="profile-accordion-item">
+                <button type="button" class="profile-accordion-header" onclick="toggleProfileSection(this)">
+                    <span>🔒 Ndrysho Password-in</span>
+                    <span class="profile-accordion-arrow">▾</span>
+                </button>
+                <div class="profile-accordion-body" hidden>
                     <form method="POST">
                         <label class="profile-label">Password aktual</label>
                         <input type="password" name="current_password" class="form-control mb-3"
@@ -230,10 +231,14 @@ include "./includes/header.php";
                         </button>
                     </form>
                 </div>
+            </div>
 
-                <div class="profile-section">
-                    <div class="profile-section-title">📧 Ndrysho Email-in</div>
-
+            <div class="profile-accordion-item">
+                <button type="button" class="profile-accordion-header" onclick="toggleProfileSection(this)">
+                    <span>📧 Ndrysho Email-in</span>
+                    <span class="profile-accordion-arrow">▾</span>
+                </button>
+                <div class="profile-accordion-body" hidden>
                     <form method="POST">
                         <label class="profile-label">Email i ri</label>
                         <input type="email" name="new_email" class="form-control mb-3"
@@ -248,10 +253,28 @@ include "./includes/header.php";
                         </button>
                     </form>
                 </div>
-
             </div>
+
         </div>
     </div>
 </div>
+
+<script>
+function toggleProfileSection(headerBtn) {
+    const item = headerBtn.closest('.profile-accordion-item');
+    const body = item.querySelector('.profile-accordion-body');
+    const isOpen = !body.hidden;
+
+    document.querySelectorAll('.profile-accordion-item').forEach(other => {
+        other.querySelector('.profile-accordion-body').hidden = true;
+        other.classList.remove('open');
+    });
+
+    if (!isOpen) {
+        body.hidden = false;
+        item.classList.add('open');
+    }
+}
+</script>
 
 <?php include "./includes/footer.php"; ?>
