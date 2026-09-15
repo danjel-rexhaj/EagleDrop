@@ -62,6 +62,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <title>EagleDrop</title>
+    <link rel="icon" type="image/svg+xml" href="/assets/favicon.svg">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="/assets/css/style.css?v=<?= filemtime(__DIR__ . '/../assets/css/style.css') ?>">
     <script src="/assets/js/theme.js" defer></script>
