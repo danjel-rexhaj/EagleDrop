@@ -96,7 +96,7 @@ function goBack() {
 
 
 
-<div class="container px-3 px-sm-4 px-md-5 px-xl-5 pb-5" style="max-width: 1400px;">
+<div class="container px-4 px-sm-4 px-md-5 px-xl-5 pb-5" style="max-width: 1400px;">
 
 <!-- ============================= -->
 <!--     KATEGORITË E PJESËVE     -->
