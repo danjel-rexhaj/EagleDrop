@@ -67,6 +67,15 @@ try {
 
 </head>
 <body>
+<script>
+(function(){
+    try {
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        }
+    } catch (e) {}
+})();
+</script>
 <nav class="navbar navbar-expand-lg main-nav">
     <div class="container">
 

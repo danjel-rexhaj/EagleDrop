@@ -103,19 +103,19 @@ function goBack() {
                 <?php endif; ?>
 
 
-                <div class="d-flex gap-3">
+                <div class="d-flex flex-wrap gap-3">
 
 
-                 
-                <button onclick="addToCart(<?= $product['id'] ?>)" 
+
+                <button onclick="addToCart(<?= $product['id'] ?>)"
                         class="btn btn-outline-success list-btn btn-lg-custom">
-                    Add to Cart
+                    🛒 Add to Cart
                 </button>
 
                 <form action="checkout_single.php" method="POST">
                     <input type="hidden" name="product_id" value="<?= $product['id'] ?>">
-                    <button class="btn btn-outline-primary list-btn btn-lg-custom">
-                        Buy Now
+                    <button class="btn list-btn btn-lg-custom btn-buy-now">
+                        ⚡ Buy Now
                     </button>
                 </form>
 
@@ -128,6 +128,45 @@ function goBack() {
         </div>
 
     </div>
+
+    <?php
+    $relatedProducts = [];
+    if (!empty($product['category_id'])) {
+        $stmtRel = $conn->prepare("SELECT * FROM products WHERE category_id = ? AND id != ? ORDER BY RAND() LIMIT 8");
+        $stmtRel->execute([$product['category_id'], $product['id']]);
+        $relatedProducts = $stmtRel->fetchAll(PDO::FETCH_ASSOC);
+    }
+    if (!$relatedProducts) {
+        $stmtRel = $conn->prepare("SELECT * FROM products WHERE id != ? ORDER BY RAND() LIMIT 8");
+        $stmtRel->execute([$product['id']]);
+        $relatedProducts = $stmtRel->fetchAll(PDO::FETCH_ASSOC);
+    }
+    ?>
+
+    <?php if ($relatedProducts): ?>
+    <div class="related-title mt-5 mb-3">
+        <h5>Produkte te ngjashme</h5>
+    </div>
+    <div class="row g-3 g-lg-4">
+        <?php foreach ($relatedProducts as $rp):
+            $rpTitle = mb_strlen($rp['title']) > 34 ? mb_substr($rp['title'], 0, 34) . '…' : $rp['title'];
+        ?>
+            <div class="col-6 col-md-4 col-lg-3">
+                <a href="product_details.php?id=<?= $rp['id'] ?>" class="related-card-link">
+                    <div class="card h-100 related-card">
+                        <div class="related-card-img">
+                            <img src="assets/uploads/<?= htmlspecialchars($rp['image']) ?>" loading="lazy" alt="">
+                        </div>
+                        <div class="card-body">
+                            <h6 class="related-card-title"><?= htmlspecialchars($rpTitle) ?></h6>
+                            <div class="related-card-price">€<?= number_format($rp['price'], 2) ?></div>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        <?php endforeach; ?>
+    </div>
+    <?php endif; ?>
 
 </div>
 
@@ -211,10 +250,109 @@ body:not(.light-mode) .product-card-wrapper img {
 }
 
 .btn-lg-custom {
-  padding: 15px 21px;
-  font-size: 18px;
-  font-weight: 400;
+  padding: 13px 26px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 30px;
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+
+.btn-lg-custom:hover {
+  transform: translateY(-2px);
+}
+
+.btn-outline-success.btn-lg-custom:hover {
+  box-shadow: 0 8px 18px rgba(25, 135, 84, 0.25);
+}
+
+.btn-buy-now {
+  background: linear-gradient(135deg, #4d7fff, #2f5fe0);
+  color: #fff;
+  border: none;
+  box-shadow: 0 6px 16px rgba(45, 95, 224, 0.35);
+}
+
+.btn-buy-now:hover {
+  color: #fff;
+  box-shadow: 0 10px 22px rgba(45, 95, 224, 0.45);
+}
+
+.related-title h5 {
+  font-weight: 700;
+  color: #495057;
+}
+
+body:not(.light-mode) .related-title h5 {
+  color: #e4e6eb;
+}
+
+.related-card-link {
+  text-decoration: none;
+}
+
+.related-card {
+  border-radius: 14px;
+  border: 1px solid #e9ecef;
+  padding: 10px;
+  transition: transform .2s ease, box-shadow .2s ease;
+}
+
+.related-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+}
+
+.related-card-img {
+  height: 100px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #f1f3f5;
   border-radius: 10px;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.related-card-img img {
+  max-height: 80px;
+  max-width: 88%;
+  object-fit: contain;
+}
+
+.related-card .card-body {
+  padding: 0;
+}
+
+.related-card-title {
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: #212529;
+  height: 2.1em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  margin-bottom: 6px;
+}
+
+.related-card-price {
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: #198754;
+}
+
+body:not(.light-mode) .related-card {
+  background-color: #1f2225;
+  border-color: rgba(90,160,255,0.25);
+}
+
+body:not(.light-mode) .related-card-title {
+  color: #e4e6eb;
+}
+
+body:not(.light-mode) .related-card-price {
+  color: #4ade80;
 }
 
 .product-free-text {
