@@ -331,7 +331,7 @@ $FALLBACK_VISIBLE = 12; // 3 rreshta x 4 kolona para "Shfaq me shume"
     <h5>ℹ️ Produkte qe i pershtaten automjetit tuaj</h5>
 </div>
 
-<div class="row g-4 justify-content-center">
+<div class="row g-3 g-md-4 g-lg-5 justify-content-center">
 <?php foreach ($fallback_products as $i => $p):
     $fbTitle = $p['title'];
     $fbTitleShort = mb_strlen($fbTitle) > 36 ? mb_substr($fbTitle, 0, 36) . '…' : $fbTitle;
