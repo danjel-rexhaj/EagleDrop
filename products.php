@@ -332,31 +332,33 @@ $FALLBACK_VISIBLE = 9; // 3 rreshta x 3 kolona para "Shfaq me shume"
 </div>
 
 <div class="row g-4 justify-content-center">
-<?php foreach ($fallback_products as $i => $p): ?>
+<?php foreach ($fallback_products as $i => $p):
+    $fbTitle = $p['title'];
+    $fbTitleShort = mb_strlen($fbTitle) > 48 ? mb_substr($fbTitle, 0, 48) . '…' : $fbTitle;
+    $fbDesc = trim((string)($p['description'] ?? ''));
+    $fbDescShort = mb_strlen($fbDesc) > 60 ? mb_substr($fbDesc, 0, 60) . '…' : $fbDesc;
+?>
   <div class="col-6 col-md-4 col-lg-4 fallback-item<?= $i >= $FALLBACK_VISIBLE ? ' fallback-hidden' : '' ?>"
        <?= $i >= $FALLBACK_VISIBLE ? 'hidden' : '' ?>>
 
     <div class="card shadow-sm h-100 product-card product-card-sm product-click"
-         data-href="product_details.php?id=<?= $p['id'] ?>">
+         data-href="product_details.php?id=<?= $p['id'] ?>"
+         title="<?= htmlspecialchars($fbTitle) ?>">
 
       <div class="product-card-sm-img">
-        <img src="assets/uploads/<?= htmlspecialchars($p['image']) ?>" loading="lazy">
+        <img src="assets/uploads/<?= htmlspecialchars($p['image']) ?>" loading="lazy" alt="">
       </div>
 
       <div class="card-body d-flex flex-column justify-content-between">
 
         <div>
-          <h6 class="text-primary mb-1">
-            <?= htmlspecialchars($p['title']) ?>
-          </h6>
+          <h6 class="text-primary mb-1 fb-title"><?= htmlspecialchars($fbTitleShort) ?></h6>
 
-          <p class="small text-muted short-description mb-2">
-            <?= htmlspecialchars($p['description']) ?>
-          </p>
+          <?php if ($fbDescShort !== ''): ?>
+          <p class="small text-muted short-description mb-2"><?= htmlspecialchars($fbDescShort) ?></p>
+          <?php endif; ?>
 
-          <h6 class="text-success fw-bold mb-2">
-            €<?= number_format($p['price'], 2) ?>
-          </h6>
+          <h6 class="text-success fw-bold mb-2">€<?= number_format($p['price'], 2) ?></h6>
         </div>
 
         <div class="d-flex justify-content-between align-items-center mt-auto gap-1">
@@ -617,38 +619,52 @@ function scrollCategories(direction) {
 }
 
 .product-card-sm .short-description {
-  height: 32px;
   overflow: hidden;
   text-overflow: ellipsis;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
+  white-space: nowrap;
   font-size: 0.78rem;
 }
 
 .product-card-sm .btn-sm {
   font-size: 0.72rem;
   padding: 0.25rem 0.5rem;
+  white-space: nowrap;
 }
 
 .product-card-sm {
   padding: 10px;
+  display: flex !important;
+  flex-direction: column;
+  border: 1px solid #e9ecef !important;
+}
+
+.product-card-sm .fb-title {
+  font-size: 0.85rem;
+  line-height: 1.25;
+  height: 2.5em;
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .product-card-sm-img {
+  width: 100%;
   height: 130px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff;
+  border: 1px solid #f1f3f5;
   border-radius: 12px;
-  margin-bottom: 8px;
+  margin-bottom: 10px;
   overflow: hidden;
+  flex-shrink: 0;
 }
 
 .product-card-sm-img img {
-  max-height: 110px;
-  max-width: 100%;
+  max-height: 108px;
+  max-width: 92%;
   object-fit: contain;
 }
 
@@ -692,6 +708,10 @@ function scrollCategories(direction) {
 
 .product-card .card-body {
   padding: 10px;
+}
+
+.product-card-sm .card-body {
+  padding: 0;
 }
 
 .product-card h6 {
