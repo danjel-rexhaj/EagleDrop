@@ -26,6 +26,7 @@ $users = $conn->query("SELECT * FROM users ORDER BY id DESC");
 ?>
 
 <?php include "../includes/admin_header.php"; ?>
+<link rel="stylesheet" href="/assets/css/admin.css">
 <div class="container mt-3">
     <button class="back-btn" onclick="goBack()">
         <span class="arrow">←</span>

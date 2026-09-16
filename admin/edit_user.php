@@ -63,7 +63,7 @@ if (isset($_POST['update_user'])) {
 
 
 <?php include "../includes/admin_header.php"; ?>
-<link rel="stylesheet" href="assets/css/admin.css">
+<link rel="stylesheet" href="/assets/css/admin.css">
 
 <div class="container mt-5">
     <div class="container mt-3">

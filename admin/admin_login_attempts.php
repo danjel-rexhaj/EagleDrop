@@ -25,6 +25,7 @@ $stmt = $conn->query("
 ?>
 
 <?php include "../includes/admin_header.php"; ?>
+<link rel="stylesheet" href="/assets/css/admin.css">
 
 <div class="container mt-4">
     <h2>🔐 Login Attempts</h2>

@@ -9,11 +9,24 @@ html, body {
     line-height: 1.6;
 }
 
+html {
+    height: 100%;
+}
+
 body {
     background-color: #1a1c1d;
     color: #fff;
     transition: background-color 0.3s ease, color 0.3s ease;
     font-size: 16px;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Push the footer to the bottom of the viewport on short pages, while
+   still flowing naturally after content on tall ones. */
+.site-footer {
+    margin-top: auto;
 }
 
 body.light-mode {

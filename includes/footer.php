@@ -57,7 +57,8 @@
 
 <style>
 .site-footer {
-    margin-top: 40px;
+    margin-top: auto;
+    padding-top: 40px;
     background: #14171a;
     color: #c6cad2;
     border-top: 1px solid rgba(255,255,255,0.08);

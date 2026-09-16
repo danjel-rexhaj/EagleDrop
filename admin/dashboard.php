@@ -28,68 +28,57 @@ $blockedUsers = $conn->query("
 ?>
 
 <?php include "../includes/admin_header.php"; ?>
-<link rel="stylesheet" href="./assets/css/admin.css">
+<link rel="stylesheet" href="/assets/css/admin.css">
 
-<div class="container mt-5">
-    <h2 class="mb-4">🛠️ Paneli i Administratorit</h2>
+<div class="admin-dashboard">
+    <div class="dashboard-wrapper">
 
-    <div class="row g-4">
+        <h2 class="mb-2"><i class="bi bi-tools"></i> Paneli i Administratorit</h2>
+        <p class="text-muted mb-0">Përmbledhje e shpejtë e platformës dhe qasje te menaxhimi.</p>
 
+        <div class="dashboard-cards">
 
-        <div class="col-6 col-md-4">
-            <div class="card shadow-sm border-0 bg-primary text-white">
-                <div class="card-body text-center">
-                    <i class="fas fa-users fa-2x mb-2"></i>
-                    <h3><?= $totalUsers ?></h3>
-                    <p class="mb-0">Perdorues gjithsej</p>
-                </div>
+            <div class="dashboard-card bg-blue">
+                <i class="bi bi-people-fill fs-2 mb-2 d-block"></i>
+                <h3><?= $totalUsers ?></h3>
+                <p>Përdorues gjithsej</p>
             </div>
+
+            <div class="dashboard-card bg-green">
+                <i class="bi bi-patch-check-fill fs-2 mb-2 d-block"></i>
+                <h3><?= $verifiedUsers ?></h3>
+                <p>Përdorues të verifikuar</p>
+            </div>
+
+            <div class="dashboard-card bg-red">
+                <i class="bi bi-shield-lock-fill fs-2 mb-2 d-block"></i>
+                <h3><?= $blockedUsers ?></h3>
+                <p>Përdorues të bllokuar</p>
+            </div>
+
         </div>
 
+        <div class="dashboard-actions">
 
-        <div class="col-6 col-md-4">
-            <div class="card shadow-sm border-0 bg-success text-white">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-check fa-2x mb-2"></i>
-                    <h3><?= $verifiedUsers ?></h3>
-                    <p class="mb-0">Perdorues te verifikuar</p>
-                </div>
-            </div>
-        </div>
+            <a href="users.php" class="btn btn-dark">
+                <i class="bi bi-people"></i> Menaxho Përdoruesit
+            </a>
 
+            <a href="payments.php" class="btn btn-outline-primary">
+                <i class="bi bi-credit-card"></i> Pagesat
+            </a>
 
-        <div class="col-6 col-md-4">
-            <div class="card shadow-sm border-0 bg-danger text-white">
-                <div class="card-body text-center">
-                    <i class="fas fa-user-lock fa-2x mb-2"></i>
-                    <h3><?= $blockedUsers ?></h3>
-                    <p class="mb-0">Perdorues te bllokuar</p>
-                </div>
-            </div>
+            <a href="admin_logs.php" class="btn btn-outline-secondary">
+                <i class="bi bi-file-earmark-text"></i> System Logs
+            </a>
+
+            <a href="admin_login_attempts.php" class="btn btn-outline-danger">
+                <i class="bi bi-shield-exclamation"></i> Login Attempts
+            </a>
+
         </div>
 
     </div>
-
-<div class="mt-5 d-flex flex-wrap gap-3">
-
-    <a href="users.php" class="btn btn-dark">
-        <i class="fas fa-users-cog"></i> Menaxho Perdoruesit
-    </a>
-
-    <a href="payments.php" class="btn btn-outline-primary">
-        <i class="fas fa-credit-card"></i> Pagesat
-    </a>
-
-    <a href="admin_logs.php" class="btn btn-outline-secondary">
-        <i class="fas fa-file-alt"></i> System Logs
-    </a>
-
-    <a href="admin_login_attempts.php" class="btn btn-outline-danger">
-        <i class="fas fa-shield-alt"></i> Login Attempts
-    </a>
-
-</div>
-
 </div>
 
 <?php include "../includes/footer.php"; ?>
