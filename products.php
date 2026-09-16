@@ -96,7 +96,7 @@ function goBack() {
 
 
 
-<div class="container px-4 px-md-5 pb-5">
+<div class="container px-3 px-sm-4 px-md-5 px-xl-5 pb-5" style="max-width: 1400px;">
 
 <!-- ============================= -->
 <!--     KATEGORITË E PJESËVE     -->
@@ -226,7 +226,7 @@ foreach ($categories as $cat):
     </div>
     
 <?php if (!empty($products)): ?>
-    <div class="row g-3"
+    <div class="row g-4"
          id="productsGrid"
          data-offset="<?= count($products) ?>"
          data-maker="<?= htmlspecialchars($maker) ?>"
@@ -237,11 +237,11 @@ foreach ($categories as $cat):
         <?php foreach ($products as $p): ?>
             <div class="col-6 col-md-4 col-lg-2">
 
-                <div class="card shadow-sm product-card h-100 p-2">
+                <div class="card shadow-sm product-card product-click h-100 p-2"
+                     data-href="product_details.php?id=<?= $p['id'] ?>">
 
                     <!-- Foto e madhe -->
-                    <div class="product-img-wrap"
-                         onclick="window.location='product_details.php?id=<?= $p['id'] ?>'">
+                    <div class="product-img-wrap">
                         <img src="assets/uploads/<?= htmlspecialchars($p['image']) ?>"
                              class="product-img">
                     </div>
@@ -249,9 +249,7 @@ foreach ($categories as $cat):
                     <div class="card-body d-flex flex-column">
 
                         <!-- Titulli -->
-                        <h6 class="fw-bold text-primary mb-1"
-                            style="cursor:pointer"
-                            onclick="window.location='product_details.php?id=<?= $p['id'] ?>'">
+                        <h6 class="fw-bold text-primary mb-1">
                             <?= htmlspecialchars($p['title']) ?>
                         </h6>
 
@@ -331,7 +329,7 @@ $fallback_products = $stmt_fb->fetchAll(PDO::FETCH_ASSOC);
     <h5>ℹ Produkte qe i pershtaten automjetit tuaj.</h5>
 </div>
 
-<div class="row g-3 justify-content-center">
+<div class="row g-4 justify-content-center">
 <?php foreach ($fallback_products as $p): ?>
   <div class="col-6 col-md-4 col-lg-3">
 
@@ -470,12 +468,12 @@ function scrollCategories(direction) {
     const col = document.createElement('div');
     col.className = 'col-6 col-md-4 col-lg-2';
     col.innerHTML = `
-      <div class="card shadow-sm product-card h-100 p-2">
-        <div class="product-img-wrap" onclick="window.location='product_details.php?id=${id}'">
+      <div class="card shadow-sm product-card product-click h-100 p-2" data-href="product_details.php?id=${id}">
+        <div class="product-img-wrap">
           <img src="assets/uploads/${escapeHtml(p.image)}" class="product-img" loading="lazy">
         </div>
         <div class="card-body d-flex flex-column">
-          <h6 class="fw-bold text-primary mb-1" style="cursor:pointer" onclick="window.location='product_details.php?id=${id}'">
+          <h6 class="fw-bold text-primary mb-1">
             ${escapeHtml(p.title)}
           </h6>
           <p class="small text-muted product-desc">${escapeHtml(p.description)}</p>
@@ -590,6 +588,7 @@ function scrollCategories(direction) {
 .product-card {
   border-radius: 14px;
   transition: 0.2s ease-in-out;
+  cursor: pointer;
 }
 
 .product-card-sm .short-description {

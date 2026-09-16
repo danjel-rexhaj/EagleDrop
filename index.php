@@ -302,8 +302,12 @@ document.addEventListener("DOMContentLoaded", () => {
 </script>
 
 <div id="searchLoadingOverlay" class="search-loading-overlay">
-    <div class="spinner-border text-light" role="status"></div>
-    <p class="mt-3 text-light fw-semibold">Duke gjetur pjeset...</p>
+    <div class="search-loading-road">
+        <span class="search-loading-car">🚗</span>
+    </div>
+    <p class="search-loading-text">
+        Duke gjetur pjesët<span class="search-loading-dots"><span>.</span><span>.</span><span>.</span></span>
+    </p>
 </div>
 
 <style>
@@ -315,11 +319,58 @@ document.addEventListener("DOMContentLoaded", () => {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    background: rgba(15, 17, 20, 0.85);
+    background: rgba(15, 17, 20, 0.9);
 }
 
 .search-loading-overlay.show {
     display: flex;
+}
+
+.search-loading-road {
+    position: relative;
+    width: 220px;
+    height: 3px;
+    background: repeating-linear-gradient(90deg, rgba(255,255,255,.35) 0 14px, transparent 14px 26px);
+    border-radius: 3px;
+    margin-bottom: 26px;
+    overflow: visible;
+}
+
+.search-loading-car {
+    position: absolute;
+    top: -17px;
+    left: 0;
+    font-size: 26px;
+    animation: searchCarDrive 1.4s ease-in-out infinite;
+    display: inline-block;
+}
+
+@keyframes searchCarDrive {
+    0%   { left: 0%;   transform: translateX(0) scaleX(1); }
+    48%  { left: 100%; transform: translateX(-100%) scaleX(1); }
+    50%  { left: 100%; transform: translateX(-100%) scaleX(-1); }
+    98%  { left: 0%;   transform: translateX(0) scaleX(-1); }
+    100% { left: 0%;   transform: translateX(0) scaleX(1); }
+}
+
+.search-loading-text {
+    color: #e9ecef;
+    font-weight: 600;
+    font-size: 17px;
+    letter-spacing: .02em;
+}
+
+.search-loading-dots span {
+    animation: searchDotPulse 1.2s infinite;
+    opacity: 0;
+}
+
+.search-loading-dots span:nth-child(2) { animation-delay: .2s; }
+.search-loading-dots span:nth-child(3) { animation-delay: .4s; }
+
+@keyframes searchDotPulse {
+    0%, 100% { opacity: 0; }
+    50% { opacity: 1; }
 }
 </style>
 
