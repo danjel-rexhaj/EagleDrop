@@ -324,7 +324,7 @@ $stmt_fb = $conn->prepare($fallback_sql);
 $stmt_fb->execute($fallback_params);
 $fallback_products = $stmt_fb->fetchAll(PDO::FETCH_ASSOC);
 
-$FALLBACK_VISIBLE = 9; // 3 rreshta x 3 kolona para "Shfaq me shume"
+$FALLBACK_VISIBLE = 12; // 3 rreshta x 4 kolona para "Shfaq me shume"
 ?>
 
 <div class="text-center py-4 compatible-title">
@@ -334,11 +334,11 @@ $FALLBACK_VISIBLE = 9; // 3 rreshta x 3 kolona para "Shfaq me shume"
 <div class="row g-4 justify-content-center">
 <?php foreach ($fallback_products as $i => $p):
     $fbTitle = $p['title'];
-    $fbTitleShort = mb_strlen($fbTitle) > 48 ? mb_substr($fbTitle, 0, 48) . '…' : $fbTitle;
+    $fbTitleShort = mb_strlen($fbTitle) > 36 ? mb_substr($fbTitle, 0, 36) . '…' : $fbTitle;
     $fbDesc = trim((string)($p['description'] ?? ''));
-    $fbDescShort = mb_strlen($fbDesc) > 60 ? mb_substr($fbDesc, 0, 60) . '…' : $fbDesc;
+    $fbDescShort = mb_strlen($fbDesc) > 42 ? mb_substr($fbDesc, 0, 42) . '…' : $fbDesc;
 ?>
-  <div class="col-6 col-md-4 col-lg-4 fallback-item<?= $i >= $FALLBACK_VISIBLE ? ' fallback-hidden' : '' ?>"
+  <div class="col-6 col-md-4 col-lg-3 fallback-item<?= $i >= $FALLBACK_VISIBLE ? ' fallback-hidden' : '' ?>"
        <?= $i >= $FALLBACK_VISIBLE ? 'hidden' : '' ?>>
 
     <div class="card shadow-sm h-100 product-card product-card-sm product-click"
@@ -632,16 +632,16 @@ function scrollCategories(direction) {
 }
 
 .product-card-sm {
-  padding: 10px;
+  padding: 8px;
   display: flex !important;
   flex-direction: column;
   border: 1px solid #e9ecef !important;
 }
 
 .product-card-sm .fb-title {
-  font-size: 0.85rem;
+  font-size: 0.8rem;
   line-height: 1.25;
-  height: 2.5em;
+  height: 2em;
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -650,21 +650,21 @@ function scrollCategories(direction) {
 
 .product-card-sm-img {
   width: 100%;
-  height: 130px;
+  height: 85px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff;
   border: 1px solid #f1f3f5;
-  border-radius: 12px;
-  margin-bottom: 10px;
+  border-radius: 10px;
+  margin-bottom: 8px;
   overflow: hidden;
   flex-shrink: 0;
 }
 
 .product-card-sm-img img {
-  max-height: 108px;
-  max-width: 92%;
+  max-height: 68px;
+  max-width: 88%;
   object-fit: contain;
 }
 
