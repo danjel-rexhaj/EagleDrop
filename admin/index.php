@@ -1,7 +1,7 @@
 <?php
-session_start();
+require "../includes/auth.php";
 
-if (!isset($_SESSION['role']) || $_SESSION['role'] !== 'admin') {
+if (($_SESSION['role'] ?? null) !== 'admin') {
     header("Location: /access_denied.php");
     exit;
 }
