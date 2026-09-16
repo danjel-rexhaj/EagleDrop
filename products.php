@@ -318,36 +318,39 @@ if ($engine !== '') {
 }
 
 // Randomizo produktet
-$fallback_sql .= " ORDER BY RAND() LIMIT 12";
+$fallback_sql .= " ORDER BY RAND() LIMIT 24";
 
 $stmt_fb = $conn->prepare($fallback_sql);
 $stmt_fb->execute($fallback_params);
 $fallback_products = $stmt_fb->fetchAll(PDO::FETCH_ASSOC);
+
+$FALLBACK_VISIBLE = 9; // 3 rreshta x 3 kolona para "Shfaq me shume"
 ?>
 
 <div class="text-center py-4 compatible-title">
-    <h5>ℹ Produkte qe i pershtaten automjetit tuaj.</h5>
+    <h5>ℹ️ Produkte qe i pershtaten automjetit tuaj</h5>
 </div>
 
 <div class="row g-4 justify-content-center">
-<?php foreach ($fallback_products as $p): ?>
-  <div class="col-6 col-md-4 col-lg-3">
+<?php foreach ($fallback_products as $i => $p): ?>
+  <div class="col-6 col-md-4 col-lg-4 fallback-item<?= $i >= $FALLBACK_VISIBLE ? ' fallback-hidden' : '' ?>"
+       <?= $i >= $FALLBACK_VISIBLE ? 'hidden' : '' ?>>
 
-    <div class="card shadow-sm h-100 product-card product-card-sm product-click p-2"
+    <div class="card shadow-sm h-100 product-card product-card-sm product-click"
          data-href="product_details.php?id=<?= $p['id'] ?>">
 
-      <img src="assets/uploads/<?= htmlspecialchars($p['image']) ?>"
-           class="card-img-top"
-           style="height:110px; object-fit:cover">
+      <div class="product-card-sm-img">
+        <img src="assets/uploads/<?= htmlspecialchars($p['image']) ?>" loading="lazy">
+      </div>
 
-      <div class="card-body d-flex flex-column justify-content-between p-2">
+      <div class="card-body d-flex flex-column justify-content-between">
 
         <div>
-          <h6 class="text-primary small mb-1">
+          <h6 class="text-primary mb-1">
             <?= htmlspecialchars($p['title']) ?>
           </h6>
 
-          <p class="small text-muted short-description mb-1">
+          <p class="small text-muted short-description mb-2">
             <?= htmlspecialchars($p['description']) ?>
           </p>
 
@@ -378,7 +381,29 @@ $fallback_products = $stmt_fb->fetchAll(PDO::FETCH_ASSOC);
 <?php endforeach; ?>
 </div>
 
+<?php if (count($fallback_products) > $FALLBACK_VISIBLE): ?>
+    <div class="text-center mt-4">
+        <button type="button" id="fallbackShowMoreBtn" class="btn btn-outline-primary px-4">
+            Shfaq me shume <i class="bi bi-chevron-down"></i>
+        </button>
+    </div>
+<?php endif; ?>
+
 </div>
+
+<script>
+(function () {
+    const btn = document.getElementById('fallbackShowMoreBtn');
+    if (!btn) return;
+    btn.addEventListener('click', function () {
+        document.querySelectorAll('.fallback-hidden').forEach(el => {
+            el.hidden = false;
+            el.classList.remove('fallback-hidden');
+        });
+        btn.remove();
+    });
+})();
+</script>
 
 <script>
 
@@ -604,6 +629,36 @@ function scrollCategories(direction) {
 .product-card-sm .btn-sm {
   font-size: 0.72rem;
   padding: 0.25rem 0.5rem;
+}
+
+.product-card-sm {
+  padding: 10px;
+}
+
+.product-card-sm-img {
+  height: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border-radius: 12px;
+  margin-bottom: 8px;
+  overflow: hidden;
+}
+
+.product-card-sm-img img {
+  max-height: 110px;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+.fallback-item {
+  transition: opacity .25s ease;
+}
+
+#fallbackShowMoreBtn {
+  border-radius: 30px;
+  font-weight: 600;
 }
 
 .product-card:hover {

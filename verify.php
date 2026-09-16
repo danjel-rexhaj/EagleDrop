@@ -21,7 +21,7 @@ $resendCooldown = 45;
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
-    $action = $_POST['action'] ?? 'verify';
+    $action = $_POST['action'] ?? 'verify'; 
 
     if ($action === 'resend') {
 
